@@ -1,0 +1,251 @@
+﻿@page "/transaction"
+@using ExpenseTracker.Components.Model
+@using ExpenseTracker.Model
+@inject UserService UserService
+
+<h1>User Transactions</h1>
+
+<style>
+    /* General Layout for the page */
+    h1 {
+        text-align: center;
+        color: #4CAF50;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+    }
+
+    .btn-primary {
+        width: 100%;
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        .btn-primary:hover {
+            background-color: #45a049;
+        }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+        table th, table td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #f2f2f2;
+        }
+
+    .form-check {
+        margin: 5px 0;
+    }
+
+    .form-check-label {
+        font-size: 14px;
+    }
+
+    .alert-info {
+        padding: 15px;
+        background-color: #d9edf7;
+        border: 1px solid #bce8f1;
+        border-radius: 5px;
+    }
+
+        .alert-info p {
+            margin: 0;
+            font-size: 16px;
+        }
+</style>
+
+<!-- Search Bar -->
+<div class="form-group">
+    <label for="search">Search Transactions</label>
+    <InputText id="search" @bind-Value="searchQuery" class="form-control" placeholder="Search by description" />
+</div>
+
+<!-- Filters for Type and Tag -->
+<div class="form-group">
+    <label>Filter by Type</label>
+    <select class="form-control" @bind="selectedType">
+        <option value="">All Types</option>
+        <option value="Debit">Debit</option>
+        <option value="Credit">Credit</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label>Filter by Tags</label>
+    <select class="form-control" @bind="selectedTag">
+        <option value="">All Tags</option>
+        @foreach (var tag in defaultTags)
+        {
+            <option value="@tag">@tag</option>
+        }
+    </select>
+</div>
+
+<!-- Search and Filter Button -->
+<div class="form-group">
+    <button class="btn btn-primary" @onclick="OnSearchAndFilterClicked">Search and Filter</button>
+</div>
+
+<!-- Sorting Options -->
+<div class="form-group">
+    <label>Sort by</label>
+    <select class="form-control" @bind="sortOption">
+        <option value="Date">Date</option>
+        <option value="Debit">Debit</option>
+        <option value="Credit">Credit</option>
+    </select>
+</div>
+
+<!-- Transaction Table -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>Transaction ID</th>
+            <th>Main Balance</th>
+            <th>Debit</th>
+            <th>Credit</th>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Tags</th>
+            <th>Note</th> <!-- Added Note column -->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var transaction in filteredTransactions)
+        {
+            <tr>
+                <td>@transaction.Id</td>
+                <td>@(Data.Transactions.Sum(t => t.Credit) - Data.Transactions.Sum(t => t.Debit))</td>
+                <td>@transaction.Debit</td>
+                <td>@transaction.Credit</td>
+                <td>@transaction.Date.ToString("MM/dd/yyyy")</td>
+                <td>@transaction.Description</td>
+                <td>@string.Join(", ", transaction.Tags)</td>
+                <td>@transaction.Note</td> <!-- Display Note -->
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h2>Add New Transaction</h2>
+<EditForm Model="newTransaction" OnValidSubmit="HandleTransactionSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="debit">Debit</label>
+        <InputNumber id="debit" @bind-Value="newTransaction.Debit" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="credit">Credit</label>
+        <InputNumber id="credit" @bind-Value="newTransaction.Credit" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description</label>
+        <InputText id="description" @bind-Value="newTransaction.Description" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="note">Note (Optional)</label>
+        <InputText id="note" @bind-Value="newTransaction.Note" class="form-control" placeholder="Add a note (Optional)" />
+    </div>
+
+    <div class="form-group">
+        <label>Tags</label>
+        @foreach (var tag in defaultTags)
+        {
+            <div class="form-check">
+                <InputCheckbox id="@tag" @bind-Value="tagSelection[tag]" class="form-check-input" />
+                <label for="@tag" class="form-check-label">@tag</label>
+            </div>
+        }
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Add Transaction</button>
+    </div>
+</EditForm>
+
+@code {
+    private AppData Data;
+    private Transactions newTransaction = new Transactions();
+    private List<string> defaultTags = new List<string> { "Monthly", "Rent", "Food", "Utilities", "Salary", "Entertainment" };
+    private string searchQuery = string.Empty;
+    private string selectedType = string.Empty;
+    private string selectedTag = string.Empty;
+    private string sortOption = "Date";
+
+    private List<Transactions> filteredTransactions = new List<Transactions>();
+    private Dictionary<string, bool> tagSelection = new Dictionary<string, bool>();
+
+    protected override void OnInitialized()
+    {
+        Data = UserService.LoadData();
+
+        foreach (var tag in defaultTags)
+        {
+            tagSelection[tag] = false;
+        }
+
+        FilterAndSortTransactions();
+    }
+
+    private void FilterAndSortTransactions()
+    {
+        filteredTransactions = UserService.FilterTransactions(Data.Transactions, searchQuery, selectedType, selectedTag, sortOption);
+    }
+
+    private void HandleTransactionSubmit()
+    {
+        newTransaction.Id = Data.Transactions.Count + 1;
+        newTransaction.Date = DateTime.Now;
+
+        // Assign selected tags based on checkbox states
+        newTransaction.Tags = tagSelection
+            .Where(kv => kv.Value)
+            .Select(kv => kv.Key)
+            .ToList();
+
+        Data.Transactions.Add(newTransaction);
+        UserService.SaveData(Data);
+
+        // Reset form
+        newTransaction = new Transactions();
+        foreach (var tag in defaultTags)
+        {
+            tagSelection[tag] = false;
+        }
+
+        FilterAndSortTransactions();
+    }
+
+    private void OnSearchAndFilterClicked()
+    {
+        // Trigger filtering and sorting when the user clicks the search/filter button
+        FilterAndSortTransactions();
+    }
+}

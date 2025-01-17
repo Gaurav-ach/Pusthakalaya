@@ -1,0 +1,108 @@
+﻿@page "/dashboard"
+
+@using ExpenseTracker.Components.Model
+@using ExpenseTracker.Model
+@using ExpenseTracker.Models
+@inject UserService UserService
+
+<h1 style="text-align: center; color: #4a90e2; margin-bottom: 20px;">Dashboard</h1>
+
+<div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between;">
+    <!-- Transaction Overview -->
+    <div style="flex: 1; min-width: 300px; background: #ffffff; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 20px; text-align: center;">
+        <h5 style="font-size: 18px; font-weight: bold; color: #555;">Transaction Overview</h5>
+        <p style="margin: 5px 0;">Total Transactions: @TotalTransactions</p>
+        <p style="margin: 5px 0;">Highest Transaction: @HighestTransaction.ToString("C")</p>
+        <p style="margin: 5px 0;">Lowest Transaction: @LowestTransaction.ToString("C")</p>
+        <p style="margin: 5px 0;">Average Transaction: @AverageTransaction.ToString("C")</p>
+    </div>
+
+    <!-- Total Balance -->
+    <div style="flex: 1; min-width: 300px; background: #ffffff; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 20px; text-align: center;">
+        <h5 style="font-size: 18px; font-weight: bold; color: #555;">Total Balance</h5>
+        <p style="font-size: 16px; font-weight: bold; color: #4caf50;">@TotalBalance.ToString("C")</p>
+    </div>
+
+    <!-- Pending Debt -->
+    <div style="flex: 1; min-width: 300px; background: #ffffff; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 20px; text-align: center;">
+        <h5 style="font-size: 18px; font-weight: bold; color: #555;">Pending Debt</h5>
+        <p style="margin: 5px 0;">Total Debt: @TotalDebt.ToString("C")</p>
+        <p style="margin: 5px 0;">Paid Debt: @PaidDebt.ToString("C")</p>
+        <p style="margin: 5px 0;">Remaining Debt: @RemainingDebt.ToString("C")</p>
+    </div>
+</div>
+
+<div style="margin-top: 30px;">
+    <h2 style="text-align: center; color: #4a90e2; margin-bottom: 20px;">Transaction History</h2>
+    <div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin-bottom: 20px;">
+        <div>
+            <label for="startDate" style="font-weight: bold; margin-bottom: 5px; display: block;">Start Date</label>
+            <InputDate id="startDate" @bind-Value="FilterStartDate" style="padding: 10px; border: 1px solid #ddd; border-radius: 4px; width: 200px;" />
+        </div>
+        <div>
+            <label for="endDate" style="font-weight: bold; margin-bottom: 5px; display: block;">End Date</label>
+            <InputDate id="endDate" @bind-Value="FilterEndDate" style="padding: 10px; border: 1px solid #ddd; border-radius: 4px; width: 200px;" />
+        </div>
+        <div>
+            <button @onclick="ApplyFilters" style="padding: 10px 20px; background-color: #4a90e2; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;">Apply Filters</button>
+        </div>
+    </div>
+    <table style="width: 100%; border-collapse: collapse; margin-top: 20px; text-align: left;">
+        <thead>
+            <tr style="background-color: #4a90e2; color: #fff;">
+                <th style="padding: 10px; border: 1px solid #ddd;">Transaction ID</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Type</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Debit</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Credit</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Date</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var transaction in FilteredTransactions)
+            {
+                <tr style="background-color: @((FilteredTransactions.IndexOf(transaction) % 2 == 0) ? "#f9f9f9" : "#ffffff");">
+                    <td style="padding: 10px; border: 1px solid #ddd;">@transaction.Id</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">@transaction.Type</td>
+                    <td style="padding: 10px; border: 1px solid #ddd; color: #d9534f;">@transaction.Debit.ToString("C")</td>
+                    <td style="padding: 10px; border: 1px solid #ddd; color: #5cb85c;">@transaction.Credit.ToString("C")</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">@transaction.Date.ToString("MM/dd/yyyy")</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">@transaction.Description</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    private AppData Data;
+    private List<Transactions> FilteredTransactions = new();
+    private DateTime? FilterStartDate;
+    private DateTime? FilterEndDate;
+
+    // Calculated fields for transactions
+    private int TotalTransactions => Data.Transactions.Count;
+    private decimal HighestTransaction => Data.Transactions.Max(t => t.Credit > t.Debit ? t.Credit : t.Debit);
+    private decimal LowestTransaction => Data.Transactions.Min(t => t.Credit > t.Debit ? t.Credit : t.Debit);
+    private decimal AverageTransaction => Data.Transactions.Average(t => t.Credit > t.Debit ? t.Credit : t.Debit);
+    private decimal TotalBalance => Data.Transactions.Sum(t => t.Credit - t.Debit);
+
+    // Calculated fields for debts
+    private decimal TotalDebt => Data.Debts.Sum(d => d.Amount);
+    private decimal PaidDebt => Data.Debts.Sum(d => d.PaidAmount);
+    private decimal RemainingDebt => TotalDebt - PaidDebt;
+
+    protected override void OnInitialized()
+    {
+        Data = UserService.LoadData();
+        FilteredTransactions = Data.Transactions; // Default to all transactions
+    }
+
+    private void ApplyFilters()
+    {
+        FilteredTransactions = Data.Transactions.Where(t =>
+            (!FilterStartDate.HasValue || t.Date.Date >= FilterStartDate.Value.Date) &&
+            (!FilterEndDate.HasValue || t.Date.Date <= FilterEndDate.Value.Date)
+        ).ToList();
+    }
+}

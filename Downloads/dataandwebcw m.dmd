@@ -1,0 +1,8 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<OSDM_Design class="oracle.dbtools.crest.model.design.Design" name="dataandwebcw m" id="82F99C2C-46E4-7908-888B-E9B1E562A7E7" version="3.5">
+<createdBy>GAURAV</createdBy>
+<createdTime>2025-03-14 06:29:38 UTC</createdTime>
+<ownerDesignName>dataandwebcw m</ownerDesignName>
+<capitalNames>false</capitalNames>
+<designId>82F99C2C-46E4-7908-888B-E9B1E562A7E7</designId>
+</OSDM_Design>

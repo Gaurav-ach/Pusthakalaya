@@ -1,0 +1,13 @@
+import React from 'react'
+import Image from 'react/image'
+
+function Header() {
+  return (
+    <div>
+          <Image src='' alt='logo'
+         width={180} height={100} />
+    </div>
+  )
+}
+
+export default Header

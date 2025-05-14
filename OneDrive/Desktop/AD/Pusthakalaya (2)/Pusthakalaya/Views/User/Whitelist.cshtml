@@ -1,0 +1,299 @@
+﻿@model IEnumerable<Pusthakalaya.Models.BookWithDiscountViewModel>
+
+@{
+    ViewData["Title"] = "My Whitelist";
+}
+
+<style>
+    /* Container */
+    .whitelist-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1.5rem 1rem;
+        background: linear-gradient(180deg, #fefce8, #f5e6b8); /* Light amber gradient to match home page */
+        border-radius: 0.75rem; /* 12px */
+    }
+
+        /* Heading */
+        .whitelist-container h2 {
+            font-size: 1.875rem; /* 2xl equivalent */
+            font-weight: 700;
+            color: #92400e; /* Dark amber-brown to match hero heading */
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+    /* Success Message */
+    .success-message {
+        background: #d1fae5; /* Light green background for success */
+        color: #047857; /* Dark green text */
+        padding: 1rem;
+        border-radius: 0.5rem; /* 8px */
+        margin-bottom: 1rem;
+        text-align: center;
+        font-size: 0.875rem;
+    }
+
+    /* Error Message */
+    .error-message {
+        background: #fee2e2; /* Light red background for errors */
+        color: #b91c1c; /* Dark red text */
+        padding: 1rem;
+        border-radius: 0.5rem; /* 8px */
+        margin-bottom: 1rem;
+        text-align: center;
+        font-size: 0.875rem;
+    }
+
+    /* Empty Whitelist Message */
+    .empty-whitelist-message {
+        font-size: 0.875rem;
+        color: #4b5563; /* Dark gray for secondary text */
+        text-align: center;
+    }
+
+    /* Whitelist Items Grid */
+    .whitelist-items-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+
+    /* Whitelist Item Card */
+    .whitelist-item-card {
+        background: #fefce8; /* Light amber to match home page */
+        border-radius: 0.75rem; /* 12px */
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        padding: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        border: 1px solid rgba(43, 108, 176, 0.2); /* Subtle blue border to tie into nav */
+    }
+
+        .whitelist-item-card .sale-badge {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: #b91c1c; /* Red for sale badge */
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem; /* 4px */
+        }
+
+        .whitelist-item-card img {
+            width: 100%;
+            height: 9rem; /* 36 equivalent */
+            object-fit: cover;
+            border-radius: 0.5rem; /* 8px */
+            margin-bottom: 0.5rem;
+        }
+
+        .whitelist-item-card .no-image {
+            width: 100%;
+            height: 9rem; /* 36 equivalent */
+            background: #fef9c3; /* Lighter amber for placeholder */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem; /* 8px */
+            margin-bottom: 0.5rem;
+            color: #4b5563; /* Dark gray for text */
+            font-size: 0.875rem;
+        }
+
+        .whitelist-item-card h3 {
+            font-size: 1rem; /* base equivalent */
+            font-weight: 600;
+            color: #92400e; /* Dark amber-brown to match headings */
+            margin-bottom: 0.25rem;
+        }
+
+            .whitelist-item-card h3 a {
+                color: #92400e;
+                transition: color 0.3s ease;
+            }
+
+                .whitelist-item-card h3 a:hover {
+                    color: #2b6cb0; /* Blue to match nav */
+                }
+
+        .whitelist-item-card p {
+            font-size: 0.875rem;
+            color: #4b5563; /* Dark gray for secondary text */
+            margin-bottom: 0.25rem;
+        }
+
+        .whitelist-item-card .price-info .original-price {
+            text-decoration: line-through;
+            color: #6b7280; /* Slightly darker gray for readability */
+        }
+
+        .whitelist-item-card .price-info .discounted-price {
+            color: #047857; /* Dark green for discounted price */
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .whitelist-item-card .description {
+            flex-grow: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            margin-bottom: 0.5rem;
+        }
+
+    /* Remove Button */
+    .remove-btn {
+        width: 100%;
+        background: #b91c1c; /* Dark red for destructive action */
+        color: #ffffff;
+        font-weight: 600;
+        font-size: 0.75rem;
+        padding: 0.25rem;
+        border-radius: 0.25rem; /* 4px */
+        transition: all 0.3s ease;
+    }
+
+        .remove-btn:hover {
+            background: #7f1d1d; /* Darker red on hover */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(185, 28, 28, 0.3);
+        }
+
+    /* Dark Mode Adjustments */
+    .dark .whitelist-container {
+        background: linear-gradient(180deg, #4b5563, #2d3748); /* Darker shades for contrast */
+    }
+
+        .dark .whitelist-container h2 {
+            color: #fefce8; /* Light amber for text */
+        }
+
+    .dark .success-message {
+        background: #064e3b; /* Darker green background */
+        color: #6ee7b7; /* Lighter green text */
+    }
+
+    .dark .error-message {
+        background: #7f1d1d; /* Darker red background */
+        color: #f87171; /* Lighter red text */
+    }
+
+    .dark .empty-whitelist-message {
+        color: #a0aec0; /* Lighter gray for secondary text */
+    }
+
+    .dark .whitelist-item-card {
+        background: #2d3748; /* Dark gray to match home page dark mode */
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+        border-color: rgba(96, 165, 250, 0.3); /* Light blue border in dark mode */
+    }
+
+        .dark .whitelist-item-card .no-image {
+            background: #6b7280; /* Darker amber-gray for placeholder */
+            color: #a0aec0; /* Lighter gray for text */
+        }
+
+        .dark .whitelist-item-card h3 a {
+            color: #fefce8; /* Light amber for headings */
+        }
+
+            .dark .whitelist-item-card h3 a:hover {
+                color: #60a5fa; /* Lighter blue on hover */
+            }
+
+        .dark .whitelist-item-card p {
+            color: #a0aec0; /* Lighter gray for secondary text */
+        }
+
+        .dark .whitelist-item-card .price-info .original-price {
+            color: #a0aec0; /* Lighter gray for secondary text */
+        }
+
+        .dark .whitelist-item-card .price-info .discounted-price {
+            color: #6ee7b7; /* Lighter green for discounted price */
+        }
+
+    .dark .remove-btn {
+        background: #7f1d1d;
+    }
+
+        .dark .remove-btn:hover {
+            background: #b91c1c;
+        }
+</style>
+
+<div class="whitelist-container">
+    <h2>My Whitelist</h2>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="success-message">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="error-message">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <p class="empty-whitelist-message">Your whitelist is empty.</p>
+    }
+    else
+    {
+        <div class="whitelist-items-grid">
+            @foreach (var item in Model)
+            {
+                var book = item.Book;
+                <div class="whitelist-item-card">
+                    @if (item.OnSaleFlag && item.IsDiscountActive)
+                    {
+                        <span class="sale-badge">On Sale</span>
+                    }
+                    @if (!string.IsNullOrEmpty(book.CoverImageUrl))
+                    {
+                        <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id">
+                            <img src="@book.CoverImageUrl" alt="@book.Title" />
+                        </a>
+                    }
+                    else
+                    {
+                        <div class="no-image">
+                            <span>No Image</span>
+                        </div>
+                    }
+                    <h3>
+                        <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id">@book.Title</a>
+                    </h3>
+                    <p>by @book.Author</p>
+                    <p class="price-info">
+                        @if (item.IsDiscountActive)
+                        {
+                            <span class="original-price">$@book.Price</span>
+                            <span class="discounted-price">$@item.DiscountedPrice.ToString("F2")</span>
+                        }
+                        else
+                        {
+                            <span>Price: $@book.Price</span>
+                        }
+                    </p>
+                    <p class="description">@book.Description</p>
+                    <form asp-controller="Cart" asp-action="RemoveFromWhitelist" method="post">
+                        <input type="hidden" name="bookId" value="@book.Id" />
+                        <button type="submit" class="remove-btn">Remove</button>
+                    </form>
+                </div>
+            }
+        </div>
+    }
+</div>

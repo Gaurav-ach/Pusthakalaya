@@ -1,0 +1,1157 @@
+﻿@model Pusthakalaya.Models.BookWithDiscountViewModel
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<Pusthakalaya.Models.ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "Book Details";
+}
+
+<style>
+    /* Star Rating */
+    .star-rating {
+        color: #f59e0b; /* Amber for filled stars */
+        font-size: 1rem;
+    }
+
+        .star-rating .empty {
+            color: #d1d5db; /* Light gray for empty stars */
+        }
+
+    /* Review Item */
+    .review-item {
+        border-bottom: 1px solid #e5e7eb;
+        padding: 0.625rem 0; /* 10px */
+    }
+
+        .review-item:last-child {
+            border-bottom: none;
+        }
+
+    /* Reply Item */
+    .reply-item {
+        margin-left: 1.25rem; /* 20px */
+        padding: 0.3125rem 0; /* 5px */
+        border-left: 2px solid #e5e7eb;
+        padding-left: 0.625rem; /* 10px */
+    }
+
+    /* Message */
+    .message {
+        padding: 0.625rem; /* 10px */
+        margin-top: 0.625rem; /* 10px */
+        border-radius: 0.3125rem; /* 5px */
+        display: none;
+    }
+
+    .success-message {
+        background: #d1fae5; /* Light green background for success */
+        color: #047857; /* Dark green text */
+        font-size: 0.875rem;
+    }
+
+    .error-message {
+        background: #fee2e2; /* Light red background for errors */
+        color: #b91c1c; /* Dark red text */
+        font-size: 0.875rem;
+    }
+
+    /* Recommendation Card */
+    .recommendation-card {
+        transition: transform 0.3s ease-in-out;
+        background: #fefce8; /* Light amber to match other sections */
+        border-radius: 0.75rem; /* 12px */
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid rgba(43, 108, 176, 0.2); /* Subtle blue border to tie into nav */
+    }
+
+        .recommendation-card:hover {
+            transform: scale(1.05);
+        }
+
+    /* Container */
+    .book-details-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1.5rem 1rem;
+        background: linear-gradient(180deg, #fefce8, #f5e6b8); /* Light amber gradient */
+        border-radius: 0.75rem; /* 12px */
+    }
+
+    /* Book Card */
+    .book-card {
+        background: #fefce8; /* Light amber to match home page */
+        border-radius: 0.75rem; /* 12px */
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        max-width: 48rem; /* 3xl equivalent */
+        margin: 0 auto;
+    }
+
+    /* Book Info Section */
+    .book-info-section {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+    }
+
+    /* Book Image */
+    .book-image-container {
+        flex: 1 1 100%;
+        margin-bottom: 1rem;
+        min-width: 12rem; /* Ensures image container doesn't shrink too much */
+    }
+
+    /* Ensure the layout switches to row on larger screens */
+    .book-image-container,
+    .book-details {
+        flex: 1 1 100%;
+    }
+
+   
+
+    .book-image {
+        width: 12rem; /* 48 equivalent */
+        height: 12rem;
+        object-fit: contain;
+        border-radius: 0.5rem; /* 8px */
+    }
+
+    .no-image {
+        width: 12rem; /* 48 equivalent */
+        height: 12rem;
+        background: #fef9c3; /* Lighter amber for placeholder */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0.5rem; /* 8px */
+        color: #92400e; /* Dark amber for text */
+        font-size: 0.875rem;
+    }
+
+    /* Book Details */
+    .book-details {
+        flex: 1 1 100%;
+    }
+
+        .book-details h2 {
+            font-size: 1.25rem; /* xl equivalent */
+            font-weight: 700;
+            color: #92400e; /* Dark amber-brown to match headings */
+            margin-bottom: 0.5rem;
+        }
+
+        .book-details .author-info {
+            font-size: 0.875rem;
+            color: #4b5563; /* Dark gray for secondary text */
+            margin-bottom: 0.5rem;
+        }
+
+        .book-details .author-link {
+            color: #2b6cb0; /* Blue to match nav */
+            transition: color 0.3s ease;
+        }
+
+            .book-details .author-link:hover {
+                color: #4c51bf;
+                text-decoration: underline;
+            }
+
+        .book-details .star-rating {
+            margin-bottom: 0.5rem;
+        }
+
+        .book-details .price-info {
+            font-size: 1.125rem; /* lg equivalent */
+            font-weight: 700;
+            color: #2d3748; /* Dark gray for primary text */
+            margin-bottom: 0.25rem;
+        }
+
+        .book-details .original-price {
+            font-size: 0.875rem;
+            color: #6b7280; /* Slightly darker gray for readability */
+            text-decoration: line-through;
+            margin-left: 0.5rem;
+        }
+
+        .book-details .discount {
+            font-size: 0.875rem;
+            color: #f59e0b; /* Amber for discount */
+            margin-left: 0.5rem;
+        }
+
+        .book-details .promotion {
+            font-size: 0.875rem;
+            color: #f59e0b; /* Amber for promotion */
+            margin-bottom: 0.5rem;
+        }
+
+        .book-details .description,
+        .book-details .stock-info {
+            font-size: 0.875rem;
+            color: #2d3748; /* Dark gray for primary text */
+            margin-bottom: 0.5rem;
+        }
+
+            .book-details .description strong,
+            .book-details .stock-info strong {
+                font-weight: 600;
+                color: #4b5563; /* Dark gray for labels */
+            }
+
+            .book-details .stock-info .out-of-stock {
+                color: #b91c1c; /* Red for out of stock */
+            }
+
+    /* Quantity Selector */
+    .quantity-selector {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .quantity-control {
+        display: flex;
+        align-items: center;
+    }
+
+        .quantity-control label {
+            font-size: 0.875rem;
+            color: #4b5563; /* Dark gray for labels */
+            margin-right: 0.5rem;
+        }
+
+        .quantity-control button {
+            background: #d1d5db; /* Light gray for buttons */
+            color: #2d3748; /* Dark gray text */
+            font-weight: 500;
+            font-size: 0.875rem;
+            padding: 0.25rem 0.5rem;
+            transition: background-color 0.3s ease;
+        }
+
+            .quantity-control button#decrement-btn {
+                border-radius: 0.25rem 0 0 0.25rem; /* Rounded left corners */
+            }
+
+            .quantity-control button#increment-btn {
+                border-radius: 0 0.25rem 0.25rem 0; /* Rounded right corners */
+            }
+
+            .quantity-control button:hover {
+                background: #b0b7c1; /* Slightly darker gray on hover */
+            }
+
+        .quantity-control input {
+            width: 3rem;
+            padding: 0.25rem;
+            text-align: center;
+            border: 1px solid #d1d5db;
+            font-size: 0.875rem;
+            color: #2d3748;
+            background: #ffffff;
+        }
+
+    /* Action Buttons */
+    .action-buttons {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        flex-wrap: wrap;
+    }
+
+        .action-buttons a,
+        .action-buttons button {
+            font-weight: 600;
+            font-size: 0.875rem;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+    .add-to-cart-btn,
+    .edit-btn,
+    .manage-discounts-btn {
+        background: linear-gradient(to right, #2b6cb0, #4c51bf); /* Blue gradient to match nav */
+        color: #ffffff;
+    }
+
+        .add-to-cart-btn:hover,
+        .edit-btn:hover,
+        .manage-discounts-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(76, 81, 191, 0.4);
+            background: #1e40af; /* Darker blue on hover */
+        }
+
+        .add-to-cart-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+    .delete-btn {
+        background: #b91c1c; /* Dark red for destructive action */
+        color: #ffffff;
+    }
+
+        .delete-btn:hover {
+            background: #7f1d1d; /* Darker red on hover */
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(185, 28, 28, 0.3);
+        }
+
+    /* Total Price */
+    .total-price {
+        font-size: 0.875rem;
+        color: #2d3748; /* Dark gray for primary text */
+        margin-bottom: 0.5rem;
+    }
+
+        .total-price strong {
+            font-weight: 600;
+            color: #4b5563; /* Dark gray for labels */
+        }
+
+    /* Reviews Section */
+    .reviews-section {
+        margin-top: 2rem;
+    }
+
+        .reviews-section h3,
+        .reviews-section h4 {
+            font-size: 1.125rem; /* lg equivalent */
+            font-weight: 600;
+            color: #92400e; /* Dark amber-brown to match headings */
+            margin-bottom: 1rem;
+        }
+
+        .reviews-section .no-reviews,
+        .reviews-section .no-recommendations {
+            font-size: 0.875rem;
+            color: #4b5563; /* Dark gray for secondary text */
+        }
+
+    /* Review Form */
+    .review-form-section {
+        margin-top: 1rem;
+    }
+
+        .review-form-section h4 {
+            font-size: 1rem; /* md equivalent */
+            font-weight: 600;
+            color: #92400e; /* Dark amber-brown to match headings */
+            margin-bottom: 0.5rem;
+        }
+
+    .review-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+        .review-form select,
+        .review-form textarea,
+        .reply-form textarea {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #d1d5db; /* Light gray border */
+            border-radius: 0.5rem; /* 8px */
+            font-size: 0.875rem;
+            color: #2d3748; /* Dark gray text */
+            background: #ffffff;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .review-form textarea,
+        .reply-form textarea {
+            resize: vertical; /* Allow vertical resizing only */
+            min-height: 80px;
+        }
+
+            .review-form select:hover,
+            .review-form textarea:hover,
+            .reply-form textarea:hover {
+                border-color: #bfdbfe; /* Light blue on hover to tie into nav */
+            }
+
+            .review-form select:focus,
+            .review-form textarea:focus,
+            .reply-form textarea:focus {
+                outline: none;
+                border-color: #4c51bf; /* Blue border on focus to match nav */
+                box-shadow: 0 0 0 3px rgba(76, 81, 191, 0.2); /* Blue focus ring */
+            }
+
+        .review-form .error,
+        .reply-form .error {
+            font-size: 0.875rem;
+            color: #dc2626; /* Red for errors */
+            display: none;
+        }
+
+        .review-form button,
+        .reply-form button {
+            background: linear-gradient(to right, #2b6cb0, #4c51bf); /* Blue gradient to match nav */
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.875rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+            .review-form button:hover,
+            .reply-form button:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 6px 16px rgba(76, 81, 191, 0.4);
+                background: #1e40af; /* Darker blue on hover */
+            }
+
+    /* Recommendations Section */
+    .recommendations-section {
+        margin-top: 2rem;
+    }
+
+        .recommendations-section h4 {
+            font-size: 1rem; /* md equivalent */
+            font-weight: 600;
+            color: #4b5563; /* Dark gray for labels */
+            margin-bottom: 0.5rem;
+        }
+
+    .recommendations-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+    }
+
+    .recommendation-card img {
+        width: 100%;
+        height: 9rem; /* 36 equivalent */
+        object-fit: cover;
+        border-radius: 0.5rem; /* 8px */
+        margin-bottom: 0.5rem;
+    }
+
+    .recommendation-card .no-image {
+        width: 100%;
+        height: 9rem; /* 36 equivalent */
+        background: #fef9c3; /* Lighter amber for placeholder */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0.5rem; /* 8px */
+        margin-bottom: 0.5rem;
+        color: #92400e; /* Dark amber for text */
+        font-size: 0.875rem;
+    }
+
+    .recommendation-card h5 {
+        font-size: 1rem; /* base equivalent */
+        font-weight: 600;
+        color: #92400e; /* Dark amber-brown to match headings */
+        margin-bottom: 0.25rem;
+    }
+
+        .recommendation-card h5 a {
+            color: #92400e;
+            transition: color 0.3s ease;
+        }
+
+            .recommendation-card h5 a:hover {
+                color: #2b6cb0; /* Blue to match nav */
+            }
+
+    .recommendation-card p {
+        font-size: 0.875rem;
+        color: #4b5563; /* Dark gray for secondary text */
+    }
+
+    /* Back Button */
+    .back-button-container {
+        margin-top: 1.5rem;
+        text-align: center;
+    }
+
+    .back-button {
+        background: #6b7280; /* Gray for neutral action */
+        color: #ffffff;
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+    }
+
+        .back-button:hover {
+            background: #4b5563; /* Darker gray on hover */
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(107, 114, 128, 0.3);
+        }
+
+    /* Dark Mode Adjustments */
+    .dark .book-details-container {
+        background: linear-gradient(180deg, #4b5563, #2d3748); /* Darker shades for contrast */
+    }
+
+    .dark .book-card {
+        background: #2d3748; /* Dark gray to match home page dark mode */
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .dark .book-details h2,
+    .dark .recommendation-card h5 a,
+    .dark .reviews-section h3,
+    .dark .reviews-section h4,
+    .dark .review-form-section h4 {
+        color: #fefce8; /* Light amber for headings */
+    }
+
+    .dark .book-details .author-info,
+    .dark .book-details .description,
+    .dark .book-details .stock-info,
+    .dark .book-details .total-price,
+    .dark .recommendation-card p,
+    .dark .reviews-section .no-reviews,
+    .dark .reviews-section .no-recommendations {
+        color: #a0aec0; /* Lighter gray for secondary text */
+    }
+
+        .dark .book-details .author-info a,
+        .dark .book-details .description strong,
+        .dark .book-details .stock-info strong,
+        .dark .book-details .total-price strong,
+        .dark .quantity-control label,
+        .dark .recommendations-section h4 {
+            color: #fefce8; /* Light amber for labels */
+        }
+
+            .dark .book-details .author-info a:hover {
+                color: #60a5fa; /* Lighter blue on hover */
+            }
+
+    .dark .book-details .price-info {
+        color: #e2e8f0; /* Light gray for primary text */
+    }
+
+    .dark .book-details .original-price {
+        color: #a0aec0; /* Lighter gray for secondary text */
+    }
+
+    .dark .book-details .no-image,
+    .dark .recommendation-card .no-image {
+        background: #6b7280; /* Darker amber-gray for placeholder */
+        color: #fefce8;
+    }
+
+    .dark .success-message {
+        background: #064e3b; /* Darker green background */
+        color: #6ee7b7; /* Lighter green text */
+    }
+
+    .dark .error-message {
+        background: #7f1d1d; /* Darker red background */
+        color: #f87171; /* Lighter red text */
+    }
+
+    .dark .review-item,
+    .dark .reply-item {
+        border-color: #6b7280;
+    }
+
+    .dark .quantity-control button {
+        background: #6b7280;
+        color: #e2e8f0;
+    }
+
+        .dark .quantity-control button:hover {
+            background: #4b5563;
+        }
+
+    .dark .add-to-cart-btn,
+    .dark .edit-btn,
+    .dark .manage-discounts-btn,
+    .dark .review-form button,
+    .dark .reply-form button {
+        background: linear-gradient(to right, #1e40af, #2b6cb0); /* Darker blue gradient */
+    }
+
+        .dark .add-to-cart-btn:hover,
+        .dark .edit-btn:hover,
+        .dark .manage-discounts-btn:hover,
+        .dark .review-form button:hover,
+        .dark .reply-form button:hover {
+            background: #4c51bf;
+        }
+
+    .dark .delete-btn {
+        background: #7f1d1d;
+    }
+
+        .dark .delete-btn:hover {
+            background: #b91c1c;
+        }
+
+    .dark .back-button {
+        background: #4b5563; /* Darker gray in dark mode */
+    }
+
+        .dark .back-button:hover {
+            background: #6b7280;
+        }
+</style>
+
+<div class="book-details-container">
+    <div class="book-card">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="success-message">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="error-message">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+
+        <div class="book-info-section">
+            @if (!string.IsNullOrEmpty(Model.Book.CoverImageUrl))
+            {
+                <div class="book-image-container">
+                    <img src="@Model.Book.CoverImageUrl" alt="@Model.Book.Title" class="book-image" />
+                </div>
+            }
+            else
+            {
+                <div class="book-image-container">
+                    <div class="no-image">
+                        <span>No Image</span>
+                    </div>
+                </div>
+            }
+            <div class="book-details">
+                <h2>@Model.Book.Title</h2>
+                <p class="author-info">
+                    Brand: @Model.Book.Author | <a href="#" class="author-link">More books by @Model.Book.Author</a>
+                </p>
+
+                <!-- Display average rating -->
+                @{
+                    double averageRating = Model.Reviews.Any() ? Model.Reviews.Average(r => r.Rating) : 0;
+                    int fullStars = (int)averageRating;
+                    bool hasHalfStar = averageRating - fullStars >= 0.5;
+                    int emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+                }
+                <div class="star-rating">
+                    @for (int i = 0; i < fullStars; i++)
+                    {
+                        <span>★</span>
+                    }
+                    @if (hasHalfStar)
+                    {
+                        <span>☆</span>
+                    }
+                    @for (int i = 0; i < emptyStars; i++)
+                    {
+                        <span class="empty">★</span>
+                    }
+                    <span class="ml-2">(@Model.Reviews.Count() reviews)</span>
+                </div>
+
+                @if (Model.IsDiscountActive)
+                {
+                    <p class="price-info">
+                        $. <span id="base-price">@Model.DiscountedPrice</span>
+                        <span class="original-price">$. @Model.Book.Price</span>
+                        <span class="discount">@((int)((Model.Book.Price - Model.DiscountedPrice) / Model.Book.Price * 100))% off</span>
+                    </p>
+                    @if (Model.OnSaleFlag)
+                    {
+                        <p class="promotion">
+                            PROMOTION: Min. spend $. 400
+                        </p>
+                    }
+                }
+                else
+                {
+                    <p class="price-info">$. <span id="base-price">@Model.Book.Price</span></p>
+                }
+
+                <p class="description"><strong>Description:</strong> @Model.Book.Description</p>
+                <p class="stock-info">
+                    <strong>Stock:</strong>
+                    @if (Model.Book.Quantity > 0)
+                    {
+                        <span>Qty: @Model.Book.Quantity</span>
+                    }
+                    else
+                    {
+                        <span class="out-of-stock">Out of Stock</span>
+                    }
+                </p>
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    var user = await UserManager.GetUserAsync(User);
+                    if (user != null)
+                    {
+                        @if (!(await UserManager.IsInRoleAsync(user, "Admin") || await UserManager.IsInRoleAsync(user, "Staff")))
+                        {
+                            <div class="quantity-selector">
+                                <div class="quantity-control">
+                                    <label>Quantity:</label>
+                                    <button type="button" onclick="updateQuantity(-1)" id="decrement-btn">-</button>
+                                    <input type="number" id="quantity" name="quantity" value="1" min="1" max="@Model.Book.Quantity" readonly />
+                                    <button type="button" onclick="updateQuantity(1)" id="increment-btn">+</button>
+                                </div>
+                                <div class="flex gap-2">
+                                    <form id="add-to-cart-form" method="post">
+                                        <input type="hidden" id="add-to-cart-quantity" name="quantity" value="1" />
+                                        <button type="button" onclick="addToCart(@Model.Book.Id)" class="add-to-cart-btn @(Model.Book.Quantity == 0 ? "opacity-50 cursor-not-allowed" : "")" @(Model.Book.Quantity == 0 ? "disabled" : "")>Add to Cart</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <p class="total-price">
+                                <strong>Total Price:</strong> $. <span id="total-price">@(Model.IsDiscountActive ? Model.DiscountedPrice : Model.Book.Price)</span>
+                            </p>
+                            <div id="cart-message" class="message"></div>
+                        }
+
+                        @if (await UserManager.IsInRoleAsync(user, "Admin"))
+                        {
+                            <div class="action-buttons">
+                                <a asp-action="Edit" asp-route-id="@Model.Book.Id" class="edit-btn">Edit</a>
+                                <a asp-action="Delete" asp-route-id="@Model.Book.Id" class="delete-btn">Delete</a>
+                                <a asp-action="ManageDiscounts" asp-route-id="@Model.Book.Id" class="manage-discounts-btn">Manage Discounts</a>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-red-600 mt-2">Unable to load user information.</p>
+                    }
+                }
+            </div>
+        </div>
+
+        <!-- Reviews Section -->
+        <div class="reviews-section">
+            <h3>Reviews</h3>
+            @if (!Model.Reviews.Any())
+            {
+                <p class="no-reviews">No reviews yet.</p>
+            }
+            else
+            {
+                <div class="space-y-4" id="reviews-list">
+                    @foreach (var review in Model.Reviews)
+                    {
+                        <div class="review-item">
+                            <div class="flex items-center mb-2">
+                                <div class="star-rating">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        if (i <= review.Rating)
+                                        {
+                                            <span>★</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="empty">★</span>
+                                        }
+                                    }
+                                </div>
+                                <span class="ml-2">@review.User.FirstName</span>
+                                <span class="ml-2">@review.ReviewDate.ToString("d MMM yyyy")</span>
+                            </div>
+                            <p>@review.Comment</p>
+
+                            <!-- Replies Section -->
+                            <div class="replies mt-2">
+                                @if (review.Replies != null && review.Replies.Any())
+                                {
+                                    foreach (var reply in review.Replies)
+                                    {
+                                        <div class="reply-item">
+                                            <div class="flex items-center mb-1">
+                                                <span class="font-semibold">@reply.User.FirstName</span>
+                                                <span class="ml-2">@reply.ReviewDate.ToString("d MMM yyyy")</span>
+                                            </div>
+                                            <p>@reply.Comment</p>
+                                        </div>
+                                    }
+                                }
+                            </div>
+
+                            <!-- Reply Form -->
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                var user = await UserManager.GetUserAsync(User);
+                                if (user != null && !(await UserManager.IsInRoleAsync(user, "Admin") || await UserManager.IsInRoleAsync(user, "Staff")) && ViewBag.HasPurchased)
+                                {
+                                    <div class="mt-2">
+                                        <form id="reply-form-@review.Id" class="reply-form" method="post">
+                                            <input type="hidden" name="bookId" value="@Model.Book.Id" />
+                                            <input type="hidden" name="parentReviewId" value="@review.Id" />
+                                            <div class="mb-2">
+                                                <textarea name="comment" placeholder="Write a reply..."></textarea>
+                                                <span class="error" id="reply-comment-error-@review.Id"></span>
+                                            </div>
+                                            <button type="button" onclick="submitReply(@review.Id)">Reply</button>
+                                        </form>
+                                        <div id="reply-message-@review.Id" class="message"></div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    }
+                </div>
+            }
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                var user = await UserManager.GetUserAsync(User);
+                if (user != null && !(await UserManager.IsInRoleAsync(user, "Admin") || await UserManager.IsInRoleAsync(user, "Staff")) && ViewBag.HasPurchased)
+                {
+                    var existingReview = Model.Reviews.FirstOrDefault(r => r.UserId == user.Id && r.ParentReviewId == null);
+                    if (existingReview == null)
+                    {
+                        <div class="review-form-section">
+                            <h4>Write a Review</h4>
+                            <form id="review-form" method="post" class="review-form">
+                                <input type="hidden" name="bookId" value="@Model.Book.Id" />
+                                <div class="form-group">
+                                    <label>Rating (1-5)</label>
+                                    <select name="rating" id="review-rating">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            <option value="@i">@i</option>
+                                        }
+                                    </select>
+                                    <span class="error" id="rating-error"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label>Comment</label>
+                                    <textarea name="comment" id="review-comment"></textarea>
+                                    <span class="error" id="comment-error"></span>
+                                </div>
+                                <button type="button" onclick="submitReview()">Submit Review</button>
+                            </form>
+                            <div id="review-message" class="message"></div>
+                        </div>
+                    }
+                }
+            }
+        </div>
+
+        <!-- Recommendations Section -->
+        <div class="recommendations-section">
+            <h3>Recommendations</h3>
+            <div class="mb-6">
+                <h4>Most Rated Books</h4>
+                @if (ViewBag.MostRatedBooks != null && ViewBag.MostRatedBooks.Count > 0)
+                {
+                    <div class="recommendations-grid">
+                        @foreach (var recommendedBook in ViewBag.MostRatedBooks as List<BookWithDiscountViewModel>)
+                        {
+                            var book = recommendedBook.Book;
+                            <div class="recommendation-card">
+                                @if (!string.IsNullOrEmpty(book.CoverImageUrl))
+                                {
+                                    <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id">
+                                        <img src="@book.CoverImageUrl" alt="@book.Title" />
+                                    </a>
+                                }
+                                else
+                                {
+                                    <div class="no-image">
+                                        <span>No Image</span>
+                                    </div>
+                                }
+                                <h5>
+                                    <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id">@book.Title</a>
+                                </h5>
+                                <p>by @book.Author</p>
+                                <p>Price: $@book.Price</p>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="no-recommendations">No recommendations available.</p>
+                }
+            </div>
+
+            <div>
+                <h4>Most Ordered Books</h4>
+                @if (ViewBag.MostOrderedBooks != null && ViewBag.MostOrderedBooks.Count > 0)
+                {
+                    <div class="recommendations-grid">
+                        @foreach (var recommendedBook in ViewBag.MostOrderedBooks as List<BookWithDiscountViewModel>)
+                        {
+                            var book = recommendedBook.Book;
+                            <div class="recommendation-card">
+                                @if (!string.IsNullOrEmpty(book.CoverImageUrl))
+                                {
+                                    <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id">
+                                        <img src="@book.CoverImageUrl" alt="@book.Title" />
+                                    </a>
+                                }
+                                else
+                                {
+                                    <div class="no-image">
+                                        <span>No Image</span>
+                                    </div>
+                                }
+                                <h5>
+                                    <a asp-controller="Books" asp-action="Details" asp-route-id="@book.Id">@book.Title</a>
+                                </h5>
+                                <p>by @book.Author</p>
+                                <p>Price: $@book.Price</p>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="no-recommendations">No recommendations available.</p>
+                }
+            </div>
+        </div>
+
+        <div class="back-button-container">
+            <a asp-controller="Books" asp-action="Index" class="back-button">Back to Books</a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        const quantityInput = document.getElementById('quantity');
+        const addToCartQuantity = document.getElementById('add-to-cart-quantity');
+        const maxQuantity = @Model.Book.Quantity;
+        const decrementBtn = document.getElementById('decrement-btn');
+        const incrementBtn = document.getElementById('increment-btn');
+        const basePrice = @Model.IsDiscountActive ? @Model.DiscountedPrice : @Model.Book.Price;
+        const totalPriceDisplay = document.getElementById('total-price');
+        const cartMessage = document.getElementById('cart-message');
+
+        function updateQuantity(change) {
+            let currentQuantity = parseInt(quantityInput.value);
+            let newQuantity = currentQuantity + change;
+
+            if (newQuantity < 1) {
+                newQuantity = 1;
+            }
+            if (newQuantity > maxQuantity) {
+                newQuantity = maxQuantity;
+            }
+
+            quantityInput.value = newQuantity;
+            addToCartQuantity.value = newQuantity;
+
+            // Update total price
+            const totalPrice = basePrice * newQuantity;
+            totalPriceDisplay.textContent = totalPrice.toFixed(2);
+
+            decrementBtn.disabled = newQuantity <= 1;
+            incrementBtn.disabled = newQuantity >= maxQuantity;
+        }
+
+        function addToCart(bookId) {
+            const quantity = parseInt(quantityInput.value);
+            const form = document.getElementById('add-to-cart-form');
+            const formData = new FormData(form);
+            formData.append('id', bookId);
+
+            $.ajax({
+                url: '@Url.Action("AddToCart", "Books")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function (response) {
+                    if (response.success) {
+                        cartMessage.className = 'message success-message';
+                        cartMessage.textContent = "Cart was added";
+                        cartMessage.style.display = 'block';
+                        setTimeout(() => cartMessage.style.display = 'none', 3000);
+                    } else {
+                        cartMessage.className = 'message error-message';
+                        cartMessage.textContent = "Cart was not added: " + response.message;
+                        cartMessage.style.display = 'block';
+                        setTimeout(() => cartMessage.style.display = 'none', 3000);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    cartMessage.className = 'message error-message';
+                    cartMessage.textContent = 'An error occurred while adding to cart: ' + (xhr.responseText || error);
+                    cartMessage.style.display = 'block';
+                    setTimeout(() => cartMessage.style.display = 'none', 3000);
+                }
+            });
+        }
+
+        function submitReview() {
+            const form = document.getElementById('review-form');
+            const formData = new FormData(form);
+            const rating = parseInt(formData.get('rating'));
+            const comment = formData.get('comment').trim();
+            const reviewMessage = document.getElementById('review-message');
+            const reviewsList = document.getElementById('reviews-list');
+            const ratingError = document.getElementById('rating-error');
+            const commentError = document.getElementById('comment-error');
+
+            // Reset error messages
+            ratingError.style.display = 'none';
+            commentError.style.display = 'none';
+
+            // Client-side validation
+            let valid = true;
+            if (rating < 1 || rating > 5) {
+                ratingError.textContent = "Rating must be between 1 and 5.";
+                ratingError.style.display = 'block';
+                valid = false;
+            }
+            if (!comment) {
+                commentError.textContent = "Comment is required.";
+                commentError.style.display = 'block';
+                valid = false;
+            }
+
+            if (!valid) return;
+
+            $.ajax({
+                url: '@Url.Action("Create", "Reviews")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function (response) {
+                    if (response.success) {
+                        reviewMessage.className = 'message success-message';
+                        reviewMessage.textContent = response.message;
+                        reviewMessage.style.display = 'block';
+                        setTimeout(() => reviewMessage.style.display = 'none', 3000);
+
+                        // Add the new review to the list
+                        const reviewHtml = `
+                            <div class="review-item">
+                                <div class="flex items-center mb-2">
+                                    <div class="star-rating">
+                                        ${Array(response.review.rating).fill('★').join('')}${Array(5 - response.review.rating).fill('<span class="empty">★</span>').join('')}
+                                    </div>
+                                    <span class="ml-2">${response.review.userName}</span>
+                                    <span class="ml-2">${response.review.reviewDate}</span>
+                                </div>
+                                <p>${response.review.comment}</p>
+                                <div class="replies mt-2"></div>
+                            </div>
+                        `;
+                        reviewsList.insertAdjacentHTML('beforeend', reviewHtml);
+
+                        // Clear the form
+                        document.getElementById('review-comment').value = '';
+                        document.getElementById('review-rating').value = '1';
+                    } else {
+                        reviewMessage.className = 'message error-message';
+                        reviewMessage.textContent = response.message;
+                        reviewMessage.style.display = 'block';
+                        setTimeout(() => reviewMessage.style.display = 'none', 3000);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    reviewMessage.className = 'message error-message';
+                    reviewMessage.textContent = 'An error occurred while submitting your review: ' + (xhr.responseText || error);
+                    reviewMessage.style.display = 'block';
+                    setTimeout(() => reviewMessage.style.display = 'none', 3000);
+                }
+            });
+        }
+
+        function submitReply(reviewId) {
+            const form = document.getElementById('reply-form-' + reviewId);
+            const formData = new FormData(form);
+            const comment = formData.get('comment').trim();
+            const replyMessage = document.getElementById('reply-message-' + reviewId);
+            const commentError = document.getElementById('reply-comment-error-' + reviewId);
+
+            // Reset error messages
+            commentError.style.display = 'none';
+
+            // Client-side validation
+            if (!comment) {
+                commentError.textContent = "Comment is required.";
+                commentError.style.display = 'block';
+                return;
+            }
+
+            $.ajax({
+                url: '@Url.Action("CreateReply", "Reviews")',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function (response) {
+                    if (response.success) {
+                        replyMessage.className = 'message success-message';
+                        replyMessage.textContent = response.message;
+                        replyMessage.style.display = 'block';
+                        setTimeout(() => replyMessage.style.display = 'none', 3000);
+
+                        // Add the new reply to the list
+                        const replyHtml = `
+                            <div class="reply-item">
+                                <div class="flex items-center mb-1">
+                                    <span class="font-semibold">${response.reply.userName}</span>
+                                    <span class="ml-2">${response.reply.reviewDate}</span>
+                                </div>
+                                <p>${response.reply.comment}</p>
+                            </div>
+                        `;
+                        const repliesContainer = form.parentElement.querySelector('.replies');
+                        repliesContainer.insertAdjacentHTML('beforeend', replyHtml);
+
+                        // Clear the form
+                        form.querySelector('textarea[name="comment"]').value = '';
+                    } else {
+                        replyMessage.className = 'message error-message';
+                        replyMessage.textContent = response.message;
+                        replyMessage.style.display = 'block';
+                        setTimeout(() => replyMessage.style.display = 'none', 3000);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    replyMessage.className = 'message error-message';
+                    replyMessage.textContent = 'An error occurred while submitting your reply: ' + (xhr.responseText || error);
+                    replyMessage.style.display = 'block';
+                    setTimeout(() => replyMessage.style.display = 'none', 3000);
+                }
+            });
+        }
+
+        decrementBtn.disabled = quantityInput.value <= 1;
+        incrementBtn.disabled = quantityInput.value >= maxQuantity;
+    </script>
+}

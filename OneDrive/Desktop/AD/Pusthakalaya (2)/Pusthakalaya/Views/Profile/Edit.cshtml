@@ -1,0 +1,288 @@
+﻿@model Pusthakalaya.Models.ProfileViewModel
+
+@{
+    ViewData["Title"] = "Edit Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    /* Container */
+    .edit-profile-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1.5rem 1rem;
+        background: linear-gradient(180deg, #fefce8, #f5e6b8); /* Light amber gradient to match home page */
+        border-radius: 0.75rem; /* 12px */
+    }
+
+        /* Heading */
+        .edit-profile-container h2 {
+            font-size: 1.875rem; /* 2xl equivalent */
+            font-weight: 700;
+            color: #92400e; /* Dark amber-brown to match hero heading */
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+    /* Form Card */
+    .profile-form-card {
+        background: #fefce8; /* Light amber to match home page */
+        border-radius: 0.75rem; /* 12px */
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        padding: 1.5rem;
+        max-width: 500px; /* Slightly wider than login/register forms */
+        margin: 0 auto;
+        border: 1px solid rgba(43, 108, 176, 0.2); /* Subtle blue border to tie into nav */
+    }
+
+    /* Form */
+    .profile-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    /* Form Group */
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+        /* Labels */
+        .form-group label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #4b5563; /* Dark gray to match hero subtitle */
+            margin-bottom: 0.25rem;
+        }
+
+        /* Inputs and File Input */
+        .form-group input,
+        .form-group input[type="file"] {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #d1d5db; /* Light gray border */
+            border-radius: 0.5rem; /* 8px */
+            font-size: 0.875rem;
+            color: #2d3748; /* Dark gray text */
+            background: #ffffff;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            .form-group input:hover,
+            .form-group input[type="file"]:hover {
+                border-color: #bfdbfe; /* Light blue on hover to tie into nav */
+            }
+
+            .form-group input:focus,
+            .form-group input[type="file"]:focus {
+                outline: none;
+                border-color: #4c51bf; /* Blue border on focus to match nav */
+                box-shadow: 0 0 0 3px rgba(76, 81, 191, 0.2); /* Blue focus ring */
+            }
+
+        /* Helper Text */
+        .form-group .helper-text {
+            font-size: 0.875rem;
+            color: #4b5563; /* Dark gray for consistency */
+            margin-top: 0.25rem;
+        }
+
+        /* Validation Messages */
+        .form-group .text-red-600 {
+            font-size: 0.875rem;
+            color: #dc2626; /* Red for errors, consistent with other forms */
+        }
+
+    /* Current Profile Image Section */
+    .current-image-section {
+        margin-top: 1rem;
+    }
+
+        .current-image-section label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #4b5563; /* Dark gray to match hero subtitle */
+            margin-bottom: 0.5rem;
+        }
+
+    .current-image {
+        width: 8rem; /* 32 equivalent */
+        height: 8rem;
+        object-fit: cover;
+        border-radius: 50%;
+        margin: 0 auto;
+        display: block;
+    }
+
+    .no-image-message {
+        text-align: center;
+        padding: 1rem;
+        background: #fef9c3; /* Lighter amber for placeholder */
+        border-radius: 0.5rem; /* 8px */
+        color: #4b5563; /* Dark gray for consistency */
+        font-size: 0.875rem;
+    }
+
+    /* Buttons */
+    .button-group {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+        .button-group a,
+        .button-group button {
+            font-weight: 600;
+            font-size: 0.875rem;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+    .save-btn {
+        background: linear-gradient(to right, #2b6cb0, #4c51bf); /* Blue gradient to match nav */
+        color: #ffffff;
+    }
+
+        .save-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(76, 81, 191, 0.4);
+            background: #1e40af; /* Darker blue on hover */
+        }
+
+    .cancel-btn {
+        background: #6b7280; /* Gray for cancel action */
+        color: #ffffff;
+    }
+
+        .cancel-btn:hover {
+            background: #4b5563; /* Darker gray on hover */
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(107, 114, 128, 0.3);
+        }
+
+    /* Dark Mode Adjustments */
+    .dark .edit-profile-container {
+        background: linear-gradient(180deg, #4b5563, #2d3748); /* Darker shades for contrast */
+    }
+
+        .dark .edit-profile-container h2 {
+            color: #fefce8; /* Light amber for text */
+        }
+
+    .dark .profile-form-card {
+        background: #2d3748; /* Dark gray to match home page dark mode */
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+        border-color: rgba(96, 165, 250, 0.3); /* Light blue border in dark mode */
+    }
+
+    .dark .form-group label,
+    .dark .current-image-section label {
+        color: #fefce8; /* Light amber for text */
+    }
+
+    .dark .form-group input,
+    .dark .form-group input[type="file"] {
+        background: #4b5563; /* Darker background for inputs */
+        border-color: #6b7280;
+        color: #e2e8f0; /* Light gray text */
+    }
+
+        .dark .form-group input:hover,
+        .dark .form-group input[type="file"]:hover {
+            border-color: #93c5fd; /* Lighter blue on hover */
+        }
+
+        .dark .form-group input:focus,
+        .dark .form-group input[type="file"]:focus {
+            border-color: #60a5fa; /* Lighter blue border on focus */
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.3);
+        }
+
+    .dark .form-group .helper-text {
+        color: #a0aec0; /* Lighter gray for readability in dark mode */
+    }
+
+    .dark .no-image-message {
+        background: #6b7280; /* Darker amber-gray for placeholder */
+        color: #a0aec0; /* Lighter gray for text */
+    }
+
+    .dark .save-btn {
+        background: linear-gradient(to right, #1e40af, #2b6cb0); /* Darker blue gradient */
+    }
+
+        .dark .save-btn:hover {
+            background: #4c51bf;
+        }
+
+    .dark .cancel-btn {
+        background: #4b5563; /* Darker gray in dark mode */
+    }
+
+        .dark .cancel-btn:hover {
+            background: #6b7280;
+        }
+</style>
+
+<div class="edit-profile-container">
+    <h2>Edit Profile</h2>
+
+    <div class="profile-form-card">
+        <form asp-action="Edit" method="post" enctype="multipart/form-data" class="profile-form">
+            <div class="form-group">
+                <label asp-for="UserName">Username</label>
+                <input asp-for="UserName" required />
+                <span asp-validation-for="UserName" class="text-red-600"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email">Email</label>
+                <input asp-for="Email" required />
+                <span asp-validation-for="Email" class="text-red-600"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FirstName">First Name</label>
+                <input asp-for="FirstName" />
+                <span asp-validation-for="FirstName" class="text-red-600"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName">Last Name</label>
+                <input asp-for="LastName" />
+                <span asp-validation-for="LastName" class="text-red-600"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProfileImage">Profile Image</label>
+                <input asp-for="ProfileImage" type="file" accept="image/*" />
+                <span asp-validation-for="ProfileImage" class="text-red-600"></span>
+                <p class="helper-text">Supported formats: JPG, PNG. Max size: 5MB.</p>
+            </div>
+            <div class="current-image-section">
+                <label>Current Profile Image</label>
+                @if (!string.IsNullOrEmpty(Model.ProfileImageUrl))
+                {
+                    <div class="text-center">
+                        <img src="@Model.ProfileImageUrl" alt="Profile Image" class="current-image" />
+                    </div>
+                }
+                else
+                {
+                    <div class="no-image-message">
+                        <p>No profile image available.</p>
+                    </div>
+                }
+            </div>
+            <div class="button-group">
+                <a asp-action="ViewProfile" class="cancel-btn">Cancel</a>
+                <button type="submit" class="save-btn">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

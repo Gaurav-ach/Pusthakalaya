@@ -1,0 +1,496 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+@inject SignInManager<Pusthakalaya.Models.ApplicationUser> SignInManager
+@inject UserManager<Pusthakalaya.Models.ApplicationUser> UserManager
+@inject Pusthakalaya.Data.ApplicationDbContext _context
+
+<!DOCTYPE html>
+<html lang="en" class="light" id="html-root">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Add SignalR client library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.min.js"></script>
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(145deg, #e6f0fa 0%, #f7fafc 100%);
+            transition: background 0.5s ease;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Merriweather', serif;
+            color: #1a202c;
+        }
+
+        .btn-cta {
+            background: linear-gradient(to right, #4c51bf, #667eea);
+            color: #ffffff;
+            padding: 0.85rem 1.75rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+            .btn-cta:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 6px 16px rgba(76, 81, 191, 0.4);
+                background: linear-gradient(to right, #667eea, #4c51bf);
+            }
+
+        .hero-bg {
+            background: linear-gradient(170deg, rgba(237, 242, 247, 0.95), rgba(255, 255, 255, 0.95)), url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+            border-radius: 16px;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+
+        .nav-item {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #f7fafc;
+            padding: 0.6rem 1.2rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+            .nav-item:hover {
+                color: #a3bffa;
+                background: rgba(255, 255, 255, 0.15);
+            }
+
+        .logo-font {
+            font-family: 'Merriweather', serif;
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: #f7fafc;
+            transition: color 0.3s ease;
+        }
+
+            .logo-font:hover {
+                color: #a3bffa;
+            }
+
+        .dropdown-menu {
+            min-width: 200px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid #e2e8f0;
+        }
+
+            .dropdown-menu a {
+                color: #1a202c !important;
+                padding: 0.75rem 1.5rem;
+                transition: all 0.2s ease;
+            }
+
+                .dropdown-menu a:hover {
+                    background: #e6f0fa !important;
+                    color: #4c51bf !important;
+                }
+
+        .dark .bg-gray-100 {
+            background: linear-gradient(145deg, #2d3748 0%, #1a202c 100%);
+        }
+
+        .dark .bg-amber-50 {
+            background: #4a5568;
+        }
+
+        .dark .text-gray-700 {
+            color: #cbd5e0;
+        }
+
+        .dark .text-amber-900 {
+            color: #667eea;
+        }
+
+        .dark .bg-amber-600 {
+            background: #5a67d8;
+        }
+
+        .dark .bg-gray-500 {
+            background: #718096;
+        }
+
+        .dark .bg-green-100 {
+            background: #2f855a;
+        }
+
+        .dark .text-green-700 {
+            color: #48bb78;
+        }
+
+        .dark .bg-red-100 {
+            background: #c53030;
+        }
+
+        .dark .text-red-600 {
+            color: #f56565;
+        }
+
+        .search-bar {
+            background: #f7fafc;
+            border-radius: 50px;
+            padding: 0.85rem 1.5rem;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+            .search-bar:hover {
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            }
+
+            .search-bar input {
+                flex: 1;
+                border: none;
+                outline: none;
+                font-size: 0.95rem;
+                color: #1a202c;
+                background: transparent;
+            }
+
+            .search-bar button {
+                background: none;
+                border: none;
+                cursor: pointer;
+                padding: 0;
+            }
+
+            .search-bar svg {
+                width: 24px;
+                height: 24px;
+                color: #718096;
+                transition: color 0.3s ease;
+            }
+
+            .search-bar:hover svg {
+                color: #4c51bf;
+            }
+
+        #notification-container {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            z-index: 1000;
+            display: none;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, rgba(74, 85, 104, 0.95), rgba(45, 55, 72, 0.95));
+            color: #f7fafc;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        #announcement-notice {
+            padding: 0;
+            background: none;
+            max-width: 350px;
+            text-align: center;
+        }
+
+        #notice-field {
+            display: block;
+            padding: 10px 14px;
+            background: linear-gradient(135deg, rgba(74, 85, 104, 0.95), rgba(45, 55, 72, 0.95));
+            color: #f7fafc;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+        }
+
+            #notice-field .message {
+                display: block;
+                margin-bottom: 10px;
+            }
+
+        /* Navbar and Footer */
+        nav.bg-amber-800, footer.bg-amber-800 {
+            background: linear-gradient(to right, #2b6cb0, #4c51bf) !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        footer {
+            padding: 1.5rem 0;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex flex-col min-h-screen">
+    <!-- Notification container -->
+    <div id="notification-container"></div>
+
+    <nav class="bg-amber-800 text-white shadow-md">
+        <div class="container mx-auto flex items-center justify-between py-4 px-4 flex-wrap">
+            <div class="flex items-center space-x-4">
+                <a asp-controller="Home" asp-action="Index" class="text-xl font-bold">Pustakalaya</a>
+                <a asp-controller="Books" asp-action="Index" class="logo-font">Books</a>
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    var user = await UserManager.GetUserAsync(User);
+                    bool isAdmin = user != null && await UserManager.IsInRoleAsync(user, "Admin");
+                    bool isStaff = user != null && await UserManager.IsInRoleAsync(user, "Staff");
+                    if (isAdmin)
+                    {
+                        <a asp-controller="Admin" asp-action="Index" class="logo-font">Dashboard</a>
+                    }
+                    if (isStaff)
+                    {
+                        <a asp-controller="Staff" asp-action="FulfillOrder" class="logo-font">Orders</a>
+                    }
+                }
+                <a asp-controller="Announcements" asp-action="Index" class="logo-font">Announcements</a>
+            </div>
+
+            <div class="flex items-center space-x-4 flex-grow mx-4 my-2 sm:my-0 order-2 sm:order-1">
+                <!-- Search Bar -->
+                <div class="flex-grow">
+                    <form asp-controller="Books" asp-action="Index" method="get" class="search-bar">
+                        <input type="text" name="search" placeholder="Search Books..." />
+                        <button type="submit">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Announcement Notice -->
+                <div id="announcement-notice">
+                    <div id="notice-field"></div>
+                </div>
+
+                <!-- Cart and Orders Links -->
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    var user = await UserManager.GetUserAsync(User);
+                    bool isAdmin = false;
+                    bool isStaff = false;
+                    int cartCount = 0;
+                    int orderCount = 0;
+
+                    if (user != null)
+                    {
+                        // Count unique books in cart (number of distinct book entries)
+                        cartCount = await _context.Carts
+                        .Where(c => c.UserId == user.Id)
+                        .Select(c => c.BookId)
+                        .Distinct()
+                        .CountAsync();
+                        // Count orders that are not cancelled and not received
+                        orderCount = await _context.Orders
+                        .Where(o => o.UserId == user.Id && !o.IsCancelled && o.Status != "Received")
+                        .CountAsync();
+                        isAdmin = await UserManager.IsInRoleAsync(user, "Admin");
+                        isStaff = await UserManager.IsInRoleAsync(user, "Staff");
+                    }
+
+                    @if (!isAdmin && !isStaff)
+                    {
+                        <!-- Cart Link -->
+                        <a asp-controller="Cart" asp-action="Cart" class="nav-item relative flex items-center">
+                            <span class="text-lg">🛒</span>
+                            <span id="cart-count" class="absolute -top-1 -right-2 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">@cartCount</span>
+                        </a>
+
+                        <!-- Orders Link -->
+                        <a asp-controller="Orders" asp-action="MyOrders" class="nav-item relative flex items-center">
+                            <span class="text-lg">Orders</span>
+                            <span id="order-count" class="absolute -top-1 -right-2 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">@orderCount</span>
+                        </a>
+                    }
+                }
+            </div>
+
+            <div class="flex items-center space-x-4 order-1 sm:order-2">
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    var user = await UserManager.GetUserAsync(User);
+                    bool isAdmin = false;
+                    bool isStaff = false;
+
+                    if (user != null)
+                    {
+                        isAdmin = await UserManager.IsInRoleAsync(user, "Admin");
+                        isStaff = await UserManager.IsInRoleAsync(user, "Staff");
+                    }
+
+                    <!-- Admin Actions -->
+                    @if (isAdmin)
+                    {
+                        <a asp-controller="Account" asp-action="CreateStaff" class="nav-item">Create Staff</a>
+                        <a asp-controller="Books" asp-action="Create" class="nav-item">Add Book</a>
+                    }
+
+                    <!-- Profile Dropdown -->
+                    <div class="relative">
+                        <button class="nav-item flex items-center focus:outline-none" id="profileDropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="mr-2">Welcome @(user?.FirstName ?? "User")</span>
+                            @if (!string.IsNullOrEmpty(user?.ProfileImageUrl))
+                            {
+                                <img src="@user.ProfileImageUrl" alt="@(user?.UserName ?? "User")" class="w-6 h-6 rounded-full mr-2" />
+                            }
+                            else
+                            {
+                                <div class="w-6 h-6 bg-gray-200 flex items-center justify-center rounded-full mr-2">
+                                    <span class="text-gray-600 text-xs">?</span>
+                                </div>
+                            }
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="hidden absolute right-0 mt-2 bg-white rounded-lg shadow-lg dropdown-menu z-10" id="profileMenu">
+                            <a asp-controller="Profile" asp-action="ViewProfile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-amber-100">View Profile</a>
+                            <a asp-controller="Profile" asp-action="Edit" class="block px-4 py-2 text-sm text-gray-700 hover:bg-amber-100">Edit Profile</a>
+                            <a asp-controller="Profile" asp-action="ChangePassword" class="block px-4 py-2 text-sm text-gray-700 hover:bg-amber-100">Change Password</a>
+                            <a asp-controller="Account" asp-action="Logout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-amber-100">Logout</a>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="Login" class="nav-item">Login</a>
+                    <a asp-controller="Account" asp-action="Register" class="nav-item">Register</a>
+                }
+
+                <!-- Dark Mode Toggle -->
+                <button id="themeToggle" class="nav-item flex items-center">
+                    <svg id="sunIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    <svg id="moonIcon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path></svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-6 flex-grow">
+        @RenderBody()
+    </div>
+
+    <!-- Add Anti-Forgery Token for AJAX Requests -->
+    @Html.AntiForgeryToken()
+
+    <footer class="bg-amber-800 text-white py-2">
+        <div class="container mx-auto text-center text-sm">
+            <p>© 2025 Pustakalaya. All rights reserved.</p>
+        </div>
+    </footer>
+
+    @RenderSection("Scripts", required: false)
+    <script>
+        // Dropdown Menu Toggle
+        const profileDropdown = document.getElementById('profileDropdown');
+        const profileMenu = document.getElementById('profileMenu');
+        if (profileDropdown && profileMenu) {
+            profileDropdown.addEventListener('click', () => {
+                profileMenu.classList.toggle('hidden');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!profileDropdown.contains(e.target) && !profileMenu.contains(e.target)) {
+                    profileMenu.classList.add('hidden');
+                }
+            });
+        }
+
+        // Dark Mode Toggle
+        const htmlRoot = document.getElementById('html-root');
+        const themeToggle = document.getElementById('themeToggle');
+        const sunIcon = document.getElementById('sunIcon');
+        const moonIcon = document.getElementById('moonIcon');
+
+        // Load saved theme
+        if (localStorage.getItem('theme') === 'dark') {
+            htmlRoot.classList.add('dark');
+            sunIcon.classList.add('hidden');
+            moonIcon.classList.remove('hidden');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            htmlRoot.classList.toggle('dark');
+            if (htmlRoot.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            } else {
+                localStorage.setItem('theme', 'light');
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            }
+        });
+
+        // SignalR Notification Logic (Existing for Order Notifications)
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/orderNotificationHub")
+            .build();
+
+        let timeoutId = null;
+
+        connection.on("ReceiveOrderNotification", (message) => {
+            const notificationContainer = document.getElementById("notification-container");
+            notificationContainer.textContent = message;
+            notificationContainer.style.display = "block";
+            notificationContainer.style.opacity = "1";
+
+            // Clear any existing timeout
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+            }
+
+            // Set a new timeout to hide the message after 60 seconds
+            timeoutId = setTimeout(() => {
+                notificationContainer.style.opacity = "0";
+                setTimeout(() => {
+                    notificationContainer.style.display = "none";
+                }, 500); // Wait for the fade-out transition to complete
+            }, 60000);
+        });
+
+        // Update cart count dynamically
+        connection.on("UpdateCartCount", (count) => {
+            const cartCountElement = document.getElementById("cart-count");
+            if (cartCountElement) {
+                cartCountElement.textContent = count;
+            }
+        });
+
+        // Update order count dynamically
+        connection.on("UpdateOrderCount", (count) => {
+            const orderCountElement = document.getElementById("order-count");
+            if (orderCountElement) {
+                orderCountElement.textContent = count;
+            }
+        });
+
+        connection.start().catch(err => console.error("SignalR Connection Error: ", err));
+
+        // SignalR Announcement Notice Logic (Updated to Append Messages)
+        const announcementConnection = new signalR.HubConnectionBuilder()
+            .withUrl("/announcementHub")
+            .build();
+
+        announcementConnection.on("ReceiveAnnouncement", (message) => {
+            const noticeField = document.getElementById("notice-field");
+            // Create a new span element for the message
+            const messageElement = document.createElement("span");
+            messageElement.className = "message";
+            messageElement.textContent = message;
+            // Append the new message to the notice field
+            noticeField.appendChild(messageElement);
+            noticeField.parentElement.style.display = "block"; // Show the notice container
+        });
+
+        announcementConnection.start().catch(err => console.error("SignalR Announcement Connection Error: ", err));
+    </script>
+</body>
+</html>

@@ -1,0 +1,553 @@
+﻿@model IEnumerable<Pusthakalaya.Models.Order>
+
+@{
+    ViewData["Title"] = "My Orders";
+}
+
+<style>
+    /* Order Checkbox */
+    .order-checkbox:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    /* Tab Styles */
+    .tab {
+        padding: 0.5rem 1rem;
+        margin-right: 0.5rem;
+        border: 1px solid #d1d5db;
+        border-radius: 0.3125rem 0.3125rem 0 0; /* 5px 5px 0 0 */
+        background-color: #f5f5f5;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        font-size: 0.875rem;
+        color: #4b5563; /* Dark gray for text */
+    }
+
+        .tab.active {
+            background-color: #fefce8; /* Light amber to match background */
+            border-bottom: 1px solid #fefce8;
+            font-weight: 600;
+            color: #92400e; /* Dark amber-brown for active tab */
+        }
+
+        .tab:hover:not(.active) {
+            background-color: #f5e6b8; /* Slightly darker amber on hover */
+        }
+
+    /* Hide Orders by Default */
+    .order-item {
+        display: none;
+    }
+
+        .order-item.visible {
+            display: flex;
+        }
+
+    /* Container */
+    .orders-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1.5rem 1rem;
+        background: linear-gradient(180deg, #fefce8, #f5e6b8); /* Light amber gradient to match home page */
+        border-radius: 0.75rem; /* 12px */
+    }
+
+        /* Heading */
+        .orders-container h2 {
+            font-size: 1.875rem; /* 2xl equivalent */
+            font-weight: 700;
+            color: #92400e; /* Dark amber-brown to match hero heading */
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+    /* Success Message */
+    .success-message {
+        background: #d1fae5; /* Light green background for success */
+        color: #047857; /* Dark green text */
+        padding: 1rem;
+        border-radius: 0.5rem; /* 8px */
+        margin-bottom: 1rem;
+        text-align: center;
+        font-size: 0.875rem;
+    }
+
+    /* Error Message */
+    .error-message {
+        background: #fee2e2; /* Light red background for errors */
+        color: #b91c1c; /* Dark red text */
+        padding: 1rem;
+        border-radius: 0.5rem; /* 8px */
+        margin-bottom: 1rem;
+        text-align: center;
+        font-size: 0.875rem;
+    }
+
+    /* Empty Orders Message */
+    .empty-orders-message {
+        font-size: 0.875rem;
+        color: #4b5563; /* Dark gray for secondary text */
+        text-align: center;
+    }
+
+    /* Tabs Container */
+    .tabs-container {
+        display: flex;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    /* Orders Card */
+    .orders-card {
+        background: #fefce8; /* Light amber to match home page */
+        border-radius: 0.75rem; /* 12px */
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        padding: 1.5rem;
+        border: 1px solid rgba(43, 108, 176, 0.2); /* Subtle blue border to tie into nav */
+    }
+
+    /* Select All Section */
+    .select-all-section {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .select-all-checkbox {
+        display: flex;
+        align-items: center;
+    }
+
+        .select-all-checkbox input {
+            margin-right: 0.5rem;
+        }
+
+        .select-all-checkbox label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #4b5563; /* Dark gray for labels */
+        }
+
+    .action-selected-btn {
+        background: #b91c1c; /* Dark red for destructive action */
+        color: #ffffff;
+        font-weight: 600;
+        font-size: 0.875rem;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+    }
+
+        .action-selected-btn:hover:not(:disabled) {
+            background: #7f1d1d; /* Darker red on hover */
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(185, 28, 28, 0.3);
+        }
+
+        .action-selected-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+    /* Orders List */
+    .orders-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    /* Order Item */
+    .order-item {
+        background: #ffffff;
+        border-radius: 0.5rem; /* 8px */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+    .order-details {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+        .order-details input {
+            margin-right: 1rem;
+        }
+
+    .order-image {
+        width: 4rem; /* 16 equivalent */
+        height: 4rem;
+        object-fit: cover;
+        border-radius: 0.5rem; /* 8px */
+    }
+
+    .no-image-placeholder {
+        width: 4rem; /* 16 equivalent */
+        height: 4rem;
+        background: #fef9c3; /* Lighter amber for placeholder */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0.5rem; /* 8px */
+        color: #4b5563; /* Dark gray for text */
+        font-size: 0.75rem;
+    }
+
+    .order-info {
+        flex: 1;
+    }
+
+        .order-info h3 {
+            font-size: 1rem; /* base equivalent */
+            font-weight: 600;
+            color: #92400e; /* Dark amber-brown to match headings */
+            margin-bottom: 0.25rem;
+        }
+
+        .order-info p {
+            font-size: 0.875rem;
+            color: #4b5563; /* Dark gray for secondary text */
+            margin-bottom: 0.25rem;
+        }
+
+        .order-info .cancelled-date {
+            color: #b91c1c; /* Red for cancelled date */
+        }
+
+        .order-info .received-date {
+            color: #047857; /* Dark green for received date */
+        }
+
+    /* Cancel/Delete Button */
+    .cancel-btn,
+    .delete-btn {
+        background: #b91c1c; /* Dark red for destructive action */
+        color: #ffffff;
+        font-weight: 600;
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem; /* 4px */
+        transition: all 0.3s ease;
+    }
+
+        .cancel-btn:hover:not(:disabled),
+        .delete-btn:hover:not(:disabled) {
+            background: #7f1d1d; /* Darker red on hover */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(185, 28, 28, 0.3);
+        }
+
+        .cancel-btn:disabled,
+        .delete-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+    /* Back to Cart Button */
+    .back-to-cart-section {
+        margin-top: 1rem;
+        text-align: center;
+    }
+
+    .back-btn {
+        background: #6b7280; /* Gray for cancel action */
+        color: #ffffff;
+        font-weight: 600;
+        font-size: 0.875rem;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+    }
+
+        .back-btn:hover {
+            background: #4b5563; /* Darker gray on hover */
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(107, 114, 128, 0.3);
+        }
+
+    /* Dark Mode Adjustments */
+    .dark .orders-container {
+        background: linear-gradient(180deg, #4b5563, #2d3748); /* Darker shades for contrast */
+    }
+
+        .dark .orders-container h2 {
+            color: #fefce8; /* Light amber for text */
+        }
+
+    .dark .success-message {
+        background: #064e3b; /* Darker green background */
+        color: #6ee7b7; /* Lighter green text */
+    }
+
+    .dark .error-message {
+        background: #7f1d1d; /* Darker red background */
+        color: #f87171; /* Lighter red text */
+    }
+
+    .dark .empty-orders-message {
+        color: #a0aec0; /* Lighter gray for secondary text */
+    }
+
+    .dark .tab {
+        background-color: #4b5563; /* Dark gray for tabs */
+        color: #e2e8f0; /* Light gray text */
+        border-color: #6b7280;
+    }
+
+        .dark .tab.active {
+            background-color: #2d3748; /* Darker gray for active tab */
+            border-bottom: 1px solid #2d3748;
+            color: #fefce8; /* Light amber for active tab */
+        }
+
+        .dark .tab:hover:not(.active) {
+            background-color: #6b7280; /* Slightly lighter gray on hover */
+        }
+
+    .dark .orders-card {
+        background: #2d3748; /* Dark gray to match home page dark mode */
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+        border-color: rgba(96, 165, 250, 0.3); /* Light blue border in dark mode */
+    }
+
+    .dark .select-all-checkbox label {
+        color: #fefce8; /* Light amber for labels */
+    }
+
+    .dark .order-item {
+        background: #4b5563; /* Slightly lighter gray for contrast */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .dark .no-image-placeholder {
+        background: #6b7280; /* Darker amber-gray for placeholder */
+        color: #a0aec0; /* Lighter gray for text */
+    }
+
+    .dark .order-info h3 {
+        color: #fefce8; /* Light amber for headings */
+    }
+
+    .dark .order-info p {
+        color: #a0aec0; /* Lighter gray for secondary text */
+    }
+
+    .dark .order-info .cancelled-date {
+        color: #f87171; /* Lighter red for cancelled date */
+    }
+
+    .dark .order-info .received-date {
+        color: #6ee7b7; /* Lighter green for received date */
+    }
+
+    .dark .action-selected-btn {
+        background: #7f1d1d;
+    }
+
+        .dark .action-selected-btn:hover:not(:disabled) {
+            background: #b91c1c;
+        }
+
+    .dark .cancel-btn,
+    .dark .delete-btn {
+        background: #7f1d1d;
+    }
+
+        .dark .cancel-btn:hover:not(:disabled),
+        .dark .delete-btn:hover:not(:disabled) {
+            background: #b91c1c;
+        }
+
+    .dark .back-btn {
+        background: #4b5563; /* Darker gray in dark mode */
+    }
+
+        .dark .back-btn:hover {
+            background: #6b7280;
+        }
+</style>
+
+<div class="orders-container">
+    <h2>My Orders</h2>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="success-message">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="error-message">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <p class="empty-orders-message">You have no orders.</p>
+    }
+    else
+    {
+        <!-- Tabs for filtering orders -->
+        <div class="tabs-container">
+            <button class="tab active" data-status="Placed" onclick="filterOrders('Placed')">Placed</button>
+            <button class="tab" data-status="Received" onclick="filterOrders('Received')">Received</button>
+            <button class="tab" data-status="Cancelled" onclick="filterOrders('Cancelled')">Cancelled</button>
+        </div>
+
+        <form id="orders-form" method="post">
+            <div class="orders-card">
+                <div class="select-all-section">
+                    <div class="select-all-checkbox">
+                        <input type="checkbox" id="selectAll" onchange="toggleSelectAll(this)" />
+                        <label for="selectAll">Select All</label>
+                    </div>
+                    <button type="submit" class="action-selected-btn" id="action-selected-btn" disabled>Cancel Selected Orders</button>
+                </div>
+                <div class="orders-list" id="orders-list">
+                    @foreach (var order in Model)
+                    {
+                        <div class="order-item" data-status="@(order.IsCancelled ? "Cancelled" : order.Status)">
+                            <div class="order-details">
+                                <input type="checkbox" name="selectedOrders" value="@order.UserId|@order.BookId|@order.OrderDate.ToUniversalTime().ToString("o")" class="order-checkbox" @(order.IsCancelled || order.Status == "Received" || !order.IsCancellable ? "disabled" : "") />
+                                @if (!string.IsNullOrEmpty(order.Book.CoverImageUrl))
+                                {
+                                    <img src="@order.Book.CoverImageUrl" alt="@order.Book.Title" class="order-image" />
+                                }
+                                else
+                                {
+                                    <div class="no-image-placeholder">
+                                        <span>No Image</span>
+                                    </div>
+                                }
+                                <div class="order-info">
+                                    <h3>@order.Book.Title</h3>
+                                    <p>by @order.Book.Author</p>
+                                    <p>Ordered: @order.OrderDate.ToString("d MMM yyyy HH:mm")</p>
+                                    <p>Quantity: @order.Quantity</p>
+                                    <p>Total: $@order.TotalPrice</p>
+                                    <p>User ID: @order.UserId</p>
+                                    <p>Claim Code: @order.ClaimCode</p>
+                                    <p>Status: @order.Status</p>
+                                    @if (order.IsCancelled)
+                                    {
+                                        <p class="cancelled-date">Cancelled on: @order.CancelledAt?.ToString("d MMM yyyy HH:mm")</p>
+                                    }
+                                    @if (order.IsFulfilled)
+                                    {
+                                        <p class="received-date">Received on: @order.FulfilledAt?.ToString("d MMM yyyy HH:mm")</p>
+                                    }
+                                </div>
+                            </div>
+                            @if (order.IsCancelled || order.Status == "Received")
+                            {
+                                <form asp-action="DeleteOrder" method="post">
+                                    <input type="hidden" name="userId" value="@order.UserId" />
+                                    <input type="hidden" name="bookId" value="@order.BookId" />
+                                    <input type="hidden" name="orderDate" value="@order.OrderDate.ToUniversalTime().ToString("o")" />
+                                    <button type="submit" class="delete-btn">Delete</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form asp-action="CancelOrder" method="post">
+                                    <input type="hidden" name="userId" value="@order.UserId" />
+                                    <input type="hidden" name="bookId" value="@order.BookId" />
+                                    <input type="hidden" name="orderDate" value="@order.OrderDate.ToUniversalTime().ToString("o")" />
+                                    <button type="submit" class="cancel-btn" @(order.IsCancelled || !order.IsCancellable ? "disabled" : "")>Cancel Order</button>
+                                </form>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </form>
+    }
+
+    <div class="back-to-cart-section">
+        <a asp-controller="Cart" asp-action="Cart" class="back-btn">Back to Cart</a>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const selectAllCheckbox = document.getElementById('selectAll');
+        const actionSelectedBtn = document.getElementById('action-selected-btn');
+        const ordersForm = document.getElementById('orders-form');
+        let orderCheckboxes = document.querySelectorAll('.order-checkbox:not([disabled])');
+
+        // Function to filter orders by status
+        function filterOrders(status) {
+            // Update active tab
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Show/hide orders based on status
+            const orders = document.querySelectorAll('.order-item');
+            orders.forEach(order => {
+                if (order.getAttribute('data-status') === status) {
+                    order.classList.add('visible');
+                } else {
+                    order.classList.remove('visible');
+                }
+            });
+
+            // Update the list of selectable checkboxes based on visible orders
+            orderCheckboxes = document.querySelectorAll('.order-item.visible .order-checkbox:not([disabled])');
+
+            // Reset "Select All" checkbox
+            selectAllCheckbox.checked = false;
+            selectAllCheckbox.indeterminate = false;
+            orderCheckboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+
+            // Update form action and button text based on the active tab
+            if (status === 'Placed') {
+                ordersForm.setAttribute('action', '@Url.Action("CancelOrders", "Cart")');
+                actionSelectedBtn.textContent = 'Cancel Selected Orders';
+            } else {
+                ordersForm.setAttribute('action', '@Url.Action("DeleteOrders", "Cart")');
+                actionSelectedBtn.textContent = 'Delete Selected Orders';
+            }
+
+            // Update cancel/delete button state
+            actionSelectedBtn.disabled = true;
+        }
+
+        // Toggle "Select All" checkbox
+        function toggleSelectAll(checkbox) {
+            orderCheckboxes.forEach(cb => {
+                cb.checked = checkbox.checked;
+            });
+            actionSelectedBtn.disabled = !checkbox.checked;
+        }
+
+        // Update "Select All" checkbox state based on individual checkbox changes
+        orderCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                const allChecked = Array.from(orderCheckboxes).every(cb => cb.checked);
+                const anyChecked = Array.from(orderCheckboxes).some(cb => cb.checked);
+                selectAllCheckbox.checked = allChecked;
+                selectAllCheckbox.indeterminate = !allChecked && anyChecked;
+                actionSelectedBtn.disabled = !anyChecked;
+            });
+        });
+
+        // Initialize by showing "Placed" orders
+        document.querySelector('.tab[data-status="Placed"]').click();
+    </script>
+}

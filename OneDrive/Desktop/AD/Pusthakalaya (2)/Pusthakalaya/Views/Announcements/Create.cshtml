@@ -1,0 +1,271 @@
+﻿@model Pusthakalaya.Models.TimedAnnouncement
+
+@{
+    ViewData["Title"] = "Create Announcement";
+}
+
+<style>
+    /* Container */
+    .announcement-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1.5rem 1rem;
+        background: linear-gradient(180deg, #fefce8, #f5e6b8); /* Light amber gradient to match home page */
+        border-radius: 12px;
+    }
+
+        /* Heading */
+        .announcement-container h2 {
+            font-size: 1.875rem; /* 2xl equivalent */
+            font-weight: 700;
+            color: #92400e; /* Dark amber-brown to match hero heading */
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+    /* Success Message */
+    .success-message {
+        background: #d1fae5; /* Light green background for success */
+        color: #047857; /* Dark green text */
+        padding: 1rem; /* Increased padding for consistency with other pages */
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        text-align: center;
+        font-size: 0.875rem;
+    }
+
+    /* Error Message */
+    .error-message {
+        background: #fee2e2; /* Light red background for errors */
+        color: #b91c1c; /* Dark red text */
+        padding: 1rem; /* Increased padding for consistency with other pages */
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        text-align: center;
+        font-size: 0.875rem;
+    }
+
+    /* Form Card */
+    .announcement-form-card {
+        background: #fefce8; /* Light amber to match home page */
+        border-radius: 12px;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        padding: 1.5rem;
+        max-width: 500px; /* Slightly wider than login/register forms */
+        margin: 0 auto;
+        border: 1px solid rgba(43, 108, 176, 0.2); /* Subtle blue border to tie into nav */
+    }
+
+    /* Form */
+    .announcement-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    /* Form Group */
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+        /* Labels */
+        .form-group label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #4b5563; /* Dark gray to match hero subtitle */
+        }
+
+        /* Inputs and Textarea */
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #d1d5db; /* Light gray border */
+            border-radius: 8px;
+            font-size: 0.875rem;
+            color: #2d3748; /* Dark gray text */
+            background: #ffffff;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-group textarea {
+            resize: vertical; /* Allow vertical resizing only */
+            min-height: 100px;
+        }
+
+            .form-group input:hover,
+            .form-group textarea:hover {
+                border-color: #bfdbfe; /* Light blue on hover to tie into nav */
+            }
+
+            .form-group input:focus,
+            .form-group textarea:focus {
+                outline: none;
+                border-color: #4c51bf; /* Blue border on focus to match nav */
+                box-shadow: 0 0 0 3px rgba(76, 81, 191, 0.2); /* Blue focus ring */
+            }
+
+        /* Validation Messages */
+        .form-group .text-red-600 {
+            font-size: 0.875rem;
+            color: #dc2626; /* Red for errors, consistent with other forms */
+        }
+
+    /* Buttons */
+    .button-group {
+        text-align: center;
+    }
+
+        .button-group button,
+        .button-group a {
+            display: inline-block;
+            font-weight: 600;
+            font-size: 0.875rem;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            margin: 0 0.25rem;
+        }
+
+    .create-btn {
+        background: linear-gradient(to right, #2b6cb0, #4c51bf); /* Blue gradient to match nav */
+        color: #ffffff;
+    }
+
+        .create-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(76, 81, 191, 0.4);
+            background: #1e40af; /* Darker blue on hover */
+        }
+
+    .cancel-btn {
+        background: #6b7280; /* Gray for cancel action */
+        color: #ffffff;
+    }
+
+        .cancel-btn:hover {
+            background: #4b5563; /* Darker gray on hover */
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(107, 114, 128, 0.3);
+        }
+
+    /* Dark Mode Adjustments */
+    .dark .announcement-container {
+        background: linear-gradient(180deg, #4b5563, #2d3748); /* Darker shades for contrast */
+    }
+
+        .dark .announcement-container h2 {
+            color: #fefce8; /* Light amber for text */
+        }
+
+    .dark .success-message {
+        background: #064e3b; /* Darker green background */
+        color: #6ee7b7; /* Lighter green text */
+    }
+
+    .dark .error-message {
+        background: #7f1d1d; /* Darker red background */
+        color: #f87171; /* Lighter red text */
+    }
+
+    .dark .announcement-form-card {
+        background: #2d3748; /* Dark gray to match home page dark mode */
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+        border-color: rgba(96, 165, 250, 0.3); /* Light blue border in dark mode */
+    }
+
+    .dark .form-group label {
+        color: #fefce8; /* Light amber for text */
+    }
+
+    .dark .form-group input,
+    .dark .form-group textarea {
+        background: #4b5563; /* Darker background for inputs */
+        border-color: #6b7280;
+        color: #e2e8f0; /* Light gray text */
+    }
+
+        .dark .form-group input:hover,
+        .dark .form-group textarea:hover {
+            border-color: #93c5fd; /* Lighter blue on hover */
+        }
+
+        .dark .form-group input:focus,
+        .dark .form-group textarea:focus {
+            border-color: #60a5fa; /* Lighter blue border on focus */
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.3);
+        }
+
+    .dark .create-btn {
+        background: linear-gradient(to right, #1e40af, #2b6cb0); /* Darker blue gradient */
+    }
+
+        .dark .create-btn:hover {
+            background: #4c51bf;
+        }
+
+    .dark .cancel-btn {
+        background: #4b5563; /* Darker gray in dark mode */
+    }
+
+        .dark .cancel-btn:hover {
+            background: #6b7280;
+        }
+</style>
+
+<div class="announcement-container">
+    <h2>Create Announcement</h2>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="success-message">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="error-message">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <div class="announcement-form-card">
+        <form asp-action="Create" method="post" class="announcement-form">
+            <div class="form-group">
+                <label asp-for="Title">Title</label>
+                <input asp-for="Title" />
+                <span asp-validation-for="Title" class="text-red-600"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Message">Message</label>
+                <textarea asp-for="Message"></textarea>
+                <span asp-validation-for="Message" class="text-red-600"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="StartDate">Start Date (UTC)</label>
+                <input asp-for="StartDate" type="datetime-local" />
+                <span asp-validation-for="StartDate" class="text-red-600"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ExpiresAt">Expires At (UTC)</label>
+                <input asp-for="ExpiresAt" type="datetime-local" />
+                <span asp-validation-for="ExpiresAt" class="text-red-600"></span>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="create-btn">Create</button>
+                <a asp-action="Index" class="cancel-btn">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

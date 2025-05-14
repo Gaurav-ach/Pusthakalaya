@@ -1,0 +1,239 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\achar\\OneDrive\\Desktop\\AD\\Pusthakalaya (2)\\Pusthakalaya\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{E80B3FB9-0846-E639-A3D5-A8DB351E3671}|Pusthakalaya.csproj|c:\\users\\achar\\onedrive\\desktop\\ad\\pusthakalaya (2)\\pusthakalaya\\views\\account\\staffcreationconfirmation.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E80B3FB9-0846-E639-A3D5-A8DB351E3671}|Pusthakalaya.csproj|solutionrelative:views\\account\\staffcreationconfirmation.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E80B3FB9-0846-E639-A3D5-A8DB351E3671}|Pusthakalaya.csproj|c:\\users\\achar\\onedrive\\desktop\\ad\\pusthakalaya (2)\\pusthakalaya\\views\\account\\resetpassword.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E80B3FB9-0846-E639-A3D5-A8DB351E3671}|Pusthakalaya.csproj|solutionrelative:views\\account\\resetpassword.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E80B3FB9-0846-E639-A3D5-A8DB351E3671}|Pusthakalaya.csproj|c:\\users\\achar\\onedrive\\desktop\\ad\\pusthakalaya (2)\\pusthakalaya\\views\\account\\registerconfirmation.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E80B3FB9-0846-E639-A3D5-A8DB351E3671}|Pusthakalaya.csproj|solutionrelative:views\\account\\registerconfirmation.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E80B3FB9-0846-E639-A3D5-A8DB351E3671}|Pusthakalaya.csproj|c:\\users\\achar\\onedrive\\desktop\\ad\\pusthakalaya (2)\\pusthakalaya\\views\\account\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E80B3FB9-0846-E639-A3D5-A8DB351E3671}|Pusthakalaya.csproj|solutionrelative:views\\account\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E80B3FB9-0846-E639-A3D5-A8DB351E3671}|Pusthakalaya.csproj|c:\\users\\achar\\onedrive\\desktop\\ad\\pusthakalaya (2)\\pusthakalaya\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E80B3FB9-0846-E639-A3D5-A8DB351E3671}|Pusthakalaya.csproj|solutionrelative:views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E80B3FB9-0846-E639-A3D5-A8DB351E3671}|Pusthakalaya.csproj|c:\\users\\achar\\onedrive\\desktop\\ad\\pusthakalaya (2)\\pusthakalaya\\views\\account\\error.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E80B3FB9-0846-E639-A3D5-A8DB351E3671}|Pusthakalaya.csproj|solutionrelative:views\\account\\error.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E80B3FB9-0846-E639-A3D5-A8DB351E3671}|Pusthakalaya.csproj|c:\\users\\achar\\onedrive\\desktop\\ad\\pusthakalaya (2)\\pusthakalaya\\views\\account\\createstaff.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E80B3FB9-0846-E639-A3D5-A8DB351E3671}|Pusthakalaya.csproj|solutionrelative:views\\account\\createstaff.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E80B3FB9-0846-E639-A3D5-A8DB351E3671}|Pusthakalaya.csproj|c:\\users\\achar\\onedrive\\desktop\\ad\\pusthakalaya (2)\\pusthakalaya\\views\\account\\confirmemail.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E80B3FB9-0846-E639-A3D5-A8DB351E3671}|Pusthakalaya.csproj|solutionrelative:views\\account\\confirmemail.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E80B3FB9-0846-E639-A3D5-A8DB351E3671}|Pusthakalaya.csproj|c:\\users\\achar\\onedrive\\desktop\\ad\\pusthakalaya (2)\\pusthakalaya\\views\\account\\accessdenied.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E80B3FB9-0846-E639-A3D5-A8DB351E3671}|Pusthakalaya.csproj|solutionrelative:views\\account\\accessdenied.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E80B3FB9-0846-E639-A3D5-A8DB351E3671}|Pusthakalaya.csproj|c:\\users\\achar\\onedrive\\desktop\\ad\\pusthakalaya (2)\\pusthakalaya\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E80B3FB9-0846-E639-A3D5-A8DB351E3671}|Pusthakalaya.csproj|solutionrelative:data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E80B3FB9-0846-E639-A3D5-A8DB351E3671}|Pusthakalaya.csproj|c:\\users\\achar\\onedrive\\desktop\\ad\\pusthakalaya (2)\\pusthakalaya\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{E80B3FB9-0846-E639-A3D5-A8DB351E3671}|Pusthakalaya.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E80B3FB9-0846-E639-A3D5-A8DB351E3671}|Pusthakalaya.csproj|c:\\users\\achar\\onedrive\\desktop\\ad\\pusthakalaya (2)\\pusthakalaya\\wwwroot\\css\\animations.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E80B3FB9-0846-E639-A3D5-A8DB351E3671}|Pusthakalaya.csproj|solutionrelative:wwwroot\\css\\animations.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "StaffCreationConfirmation.cshtml",
+              "DocumentMoniker": "C:\\Users\\achar\\OneDrive\\Desktop\\AD\\Pusthakalaya (2)\\Pusthakalaya\\Views\\Account\\StaffCreationConfirmation.cshtml",
+              "RelativeDocumentMoniker": "Views\\Account\\StaffCreationConfirmation.cshtml",
+              "ToolTip": "C:\\Users\\achar\\OneDrive\\Desktop\\AD\\Pusthakalaya (2)\\Pusthakalaya\\Views\\Account\\StaffCreationConfirmation.cshtml",
+              "RelativeToolTip": "Views\\Account\\StaffCreationConfirmation.cshtml",
+              "ViewState": "AgIAAAMAAAAAAAAAAADwvwsAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-14T06:52:52.449Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "RegisterConfirmation.cshtml",
+              "DocumentMoniker": "C:\\Users\\achar\\OneDrive\\Desktop\\AD\\Pusthakalaya (2)\\Pusthakalaya\\Views\\Account\\RegisterConfirmation.cshtml",
+              "RelativeDocumentMoniker": "Views\\Account\\RegisterConfirmation.cshtml",
+              "ToolTip": "C:\\Users\\achar\\OneDrive\\Desktop\\AD\\Pusthakalaya (2)\\Pusthakalaya\\Views\\Account\\RegisterConfirmation.cshtml",
+              "RelativeToolTip": "Views\\Account\\RegisterConfirmation.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-14T06:52:45.887Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "C:\\Users\\achar\\OneDrive\\Desktop\\AD\\Pusthakalaya (2)\\Pusthakalaya\\Views\\Account\\Login.cshtml",
+              "RelativeDocumentMoniker": "Views\\Account\\Login.cshtml",
+              "ToolTip": "C:\\Users\\achar\\OneDrive\\Desktop\\AD\\Pusthakalaya (2)\\Pusthakalaya\\Views\\Account\\Login.cshtml",
+              "RelativeToolTip": "Views\\Account\\Login.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-10T16:29:34.518Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Error.cshtml",
+              "DocumentMoniker": "C:\\Users\\achar\\OneDrive\\Desktop\\AD\\Pusthakalaya (2)\\Pusthakalaya\\Views\\Account\\Error.cshtml",
+              "RelativeDocumentMoniker": "Views\\Account\\Error.cshtml",
+              "ToolTip": "C:\\Users\\achar\\OneDrive\\Desktop\\AD\\Pusthakalaya (2)\\Pusthakalaya\\Views\\Account\\Error.cshtml",
+              "RelativeToolTip": "Views\\Account\\Error.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-10T16:29:18.786Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "CreateStaff.cshtml",
+              "DocumentMoniker": "C:\\Users\\achar\\OneDrive\\Desktop\\AD\\Pusthakalaya (2)\\Pusthakalaya\\Views\\Account\\CreateStaff.cshtml",
+              "RelativeDocumentMoniker": "Views\\Account\\CreateStaff.cshtml",
+              "ToolTip": "C:\\Users\\achar\\OneDrive\\Desktop\\AD\\Pusthakalaya (2)\\Pusthakalaya\\Views\\Account\\CreateStaff.cshtml",
+              "RelativeToolTip": "Views\\Account\\CreateStaff.cshtml",
+              "ViewState": "AgIAAIwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-10T16:28:49.872Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "AccessDenied.cshtml",
+              "DocumentMoniker": "C:\\Users\\achar\\OneDrive\\Desktop\\AD\\Pusthakalaya (2)\\Pusthakalaya\\Views\\Account\\AccessDenied.cshtml",
+              "RelativeDocumentMoniker": "Views\\Account\\AccessDenied.cshtml",
+              "ToolTip": "C:\\Users\\achar\\OneDrive\\Desktop\\AD\\Pusthakalaya (2)\\Pusthakalaya\\Views\\Account\\AccessDenied.cshtml",
+              "RelativeToolTip": "Views\\Account\\AccessDenied.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-10T16:23:44.967Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ResetPassword.cshtml",
+              "DocumentMoniker": "C:\\Users\\achar\\OneDrive\\Desktop\\AD\\Pusthakalaya (2)\\Pusthakalaya\\Views\\Account\\ResetPassword.cshtml",
+              "RelativeDocumentMoniker": "Views\\Account\\ResetPassword.cshtml",
+              "ToolTip": "C:\\Users\\achar\\OneDrive\\Desktop\\AD\\Pusthakalaya (2)\\Pusthakalaya\\Views\\Account\\ResetPassword.cshtml",
+              "RelativeToolTip": "Views\\Account\\ResetPassword.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-10T16:30:01.096Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\achar\\OneDrive\\Desktop\\AD\\Pusthakalaya (2)\\Pusthakalaya\\Data\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "Data\\ApplicationDbContext.cs",
+              "ToolTip": "C:\\Users\\achar\\OneDrive\\Desktop\\AD\\Pusthakalaya (2)\\Pusthakalaya\\Data\\ApplicationDbContext.cs",
+              "RelativeToolTip": "Data\\ApplicationDbContext.cs",
+              "ViewState": "AgIAAFAAAAAAAAAAAAAgwGAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-12T08:28:35.657Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ConfirmEmail.cshtml",
+              "DocumentMoniker": "C:\\Users\\achar\\OneDrive\\Desktop\\AD\\Pusthakalaya (2)\\Pusthakalaya\\Views\\Account\\ConfirmEmail.cshtml",
+              "RelativeDocumentMoniker": "Views\\Account\\ConfirmEmail.cshtml",
+              "ToolTip": "C:\\Users\\achar\\OneDrive\\Desktop\\AD\\Pusthakalaya (2)\\Pusthakalaya\\Views\\Account\\ConfirmEmail.cshtml",
+              "RelativeToolTip": "Views\\Account\\ConfirmEmail.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-10T16:24:31.383Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Register.cshtml",
+              "DocumentMoniker": "C:\\Users\\achar\\OneDrive\\Desktop\\AD\\Pusthakalaya (2)\\Pusthakalaya\\Views\\Account\\Register.cshtml",
+              "RelativeDocumentMoniker": "Views\\Account\\Register.cshtml",
+              "ToolTip": "C:\\Users\\achar\\OneDrive\\Desktop\\AD\\Pusthakalaya (2)\\Pusthakalaya\\Views\\Account\\Register.cshtml",
+              "RelativeToolTip": "Views\\Account\\Register.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-10T16:29:49.304Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "animations.cs",
+              "DocumentMoniker": "C:\\Users\\achar\\OneDrive\\Desktop\\AD\\Pusthakalaya (2)\\Pusthakalaya\\wwwroot\\css\\animations.cs",
+              "RelativeDocumentMoniker": "wwwroot\\css\\animations.cs",
+              "ToolTip": "C:\\Users\\achar\\OneDrive\\Desktop\\AD\\Pusthakalaya (2)\\Pusthakalaya\\wwwroot\\css\\animations.cs",
+              "RelativeToolTip": "wwwroot\\css\\animations.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-10T16:26:23.132Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\achar\\OneDrive\\Desktop\\AD\\Pusthakalaya (2)\\Pusthakalaya\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "C:\\Users\\achar\\OneDrive\\Desktop\\AD\\Pusthakalaya (2)\\Pusthakalaya\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAAABoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-05-10T16:33:01.558Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
